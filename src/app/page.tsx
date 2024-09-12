@@ -1,16 +1,35 @@
+"use client";
+import { useState } from "react";
+import {
+  MailIcon,
+  GithubIcon,
+  LinkedinIcon,
+  FileDownIcon,
+  MenuIcon,
+  XIcon,
+} from "lucide-react";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { MailIcon, GithubIcon, LinkedinIcon, FileDownIcon } from "lucide-react";
 import Image from "next/image";
 import GitHubCalendar from "react-github-calendar";
 
 export default function Home() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div className=" bg-slate-950/60 backdrop-blur-md text-white">
+    <div
+      className={`bg-slate-950/60 backdrop-blur-md text-white ${
+        isOpen ? "backdrop-filter backdrop-blur-md" : ""
+      }`}
+    >
       {/* Imagen de perfil */}
       <div className="flex flex-col items-center px-4">
         <Image
@@ -22,17 +41,6 @@ export default function Home() {
         />
 
         {/* Badges de aptitudes */}
-        <div className="flex flex-wrap justify-center gap-2 mt-4 sm:gap-3 sm:mt-6 lg:gap-4">
-          <span className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold">
-            Desarrollo de software
-          </span>
-          <span className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold">
-            Programación orientada a eventos
-          </span>
-          <span className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold">
-            Arquitectura de sistemas
-          </span>
-        </div>
       </div>
 
       {/* Nombre y descripción */}
@@ -40,18 +48,28 @@ export default function Home() {
         Gabriel Mattesich
       </h1>
       <p className="text-center text-sm sm:text-base lg:text-lg mb-6">
-        Software Engineer | Córdoba, Argentina
+        Software developer | Córdoba, Argentina
       </p>
-
+      <div className="flex flex-wrap justify-center gap-2 mt-4 sm:gap-3 sm:mt-6 lg:gap-4">
+        <span className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold">
+          Desarrollo de software
+        </span>
+        <span className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold">
+          Programación orientada a eventos
+        </span>
+        <span className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold">
+          Arquitectura de sistemas
+        </span>
+      </div>
       {/* GitHub Activity */}
       <div className="mb-8 mx-auto max-w-md lg:max-w-4xl p-4">
         <GitHubCalendar username="gabrielmattesich" colorScheme="light" />
       </div>
 
-      <div className="mx-auto p-4 sm:p-6 lg:p-8 max-w-md lg:max-w-4xl bg-slate-950/60 rounded-md backdrop-blur-md">
+      {/* Contenido */}
+      <div className="mx-auto p-4 sm:p-6 lg:p-8 max-w-md lg:max-w-4xl bg-slate-950/40 backdrop-blur-md rounded-md">
         {/* Accordion for sections */}
         <Accordion type="single" collapsible>
-
           {/* Presentación */}
           <AccordionItem value="extract">
             <AccordionTrigger className="text-lg sm:text-xl lg:text-2xl font-bold">
@@ -102,7 +120,9 @@ export default function Home() {
                       Noviembre de 2019 - Noviembre de 2022 | Córdoba, Argentina
                     </p>
                     <ul className="list-disc list-inside text-sm sm:text-base">
-                      <li>Desarrollo de soluciones utilizando microservicios.</li>
+                      <li>
+                        Desarrollo de soluciones utilizando microservicios.
+                      </li>
                       <li>
                         Implementación de arquitectura dirigida por eventos.
                       </li>
@@ -180,36 +200,58 @@ export default function Home() {
         </Accordion>
       </div>
 
-      {/* Botón flotante para contacto */}
-      
-      <a
-        href="https://www.linkedin.com/in/gabriel-mattesich"
-        className="fixed bottom-8 right-8 bg-blue-500/50 backdrop-blur-lg text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-105 z-50"
-      >
-        <LinkedinIcon />
-      </a>
-      <a
-        href="mailto:mattesichgabriel@gmail.com"
-        className="fixed bottom-40 right-8 bg-blue-500/50 backdrop-blur-lg text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-105 z-50"
-      >
-        <MailIcon />
-      </a>
-      <a
-        href="https://github.com/gabrielmattesich"
-        className="fixed bottom-24 right-8 bg-blue-500/50 backdrop-blur-lg text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-105 z-50"
-      >
-        <GithubIcon />
-      </a>
-      <a
-        href="https://github.com/gabrielmattesich"
-        className="fixed bottom-56 right-8 bg-blue-500/50 backdrop-blur-lg text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-105 z-50"
-      >
-        <FileDownIcon />
-      </a>
+      {/* Filtro de desenfoque cuando el menú está abierto */}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"></div>
+      )}
+      {/* Botón flotante principal */}
+      <div className="fixed right-8 bottom-8 flex flex-col gap-4 z-50">
+        <button
+          onClick={toggleMenu}
+          className="bg-violet-500/80 text-white p-4 rounded-full shadow-lg hover:bg-violet-600 transition transform hover:scale-105 z-50"
+          aria-label="Toggle Menu"
+        >
+          {isOpen ? <XIcon /> : <MenuIcon />}
+        </button>
+
+        {/* Opciones desplegables */}
+        {isOpen && (
+          <div className="flex flex-col gap-4 mt-4 z-50">
+            <a
+              href="https://www.linkedin.com/in/gabriel-mattesich"
+              className="bg-blue-500/80 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-105 z-50"
+              aria-label="LinkedIn"
+            >
+              <LinkedinIcon />
+            </a>
+            <a
+              href="mailto:mattesichgabriel@gmail.com"
+              className="bg-green-500/80 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition transform hover:scale-105 z-50"
+              aria-label="Correo electrónico"
+            >
+              <MailIcon />
+            </a>
+            <a
+              href="https://github.com/gabrielmattesich"
+              className="bg-gray-900/80 text-white p-4 rounded-full shadow-lg hover:bg-gray-700 transition transform hover:scale-105 z-50"
+              aria-label="GitHub"
+            >
+              <GithubIcon />
+            </a>
+            <a
+              href="/cv.pdf" // Asegúrate de tener este archivo en tu carpeta pública o el enlace correcto
+              className="bg-pink-500/80 text-white p-4 rounded-full shadow-lg hover:bg-pink-600 transition transform hover:scale-105 z-50"
+              aria-label="Descargar CV"
+            >
+              <FileDownIcon />
+            </a>
+          </div>
+        )}
+      </div>
 
       {/* Footer */}
-      <footer className="text-center text-sm sm:text-base lg:text-lg py-4 mt-8 backdrop-blur-sm rounded-full p-4 bg-slate-900">
-        <p>Hecho en 🇦🇷</p>
+      <footer className="text-center text-sm sm:text-base lg:text-lg py-4 mt-8 backdrop-blur-sm rounded-full p-4">
+        <p>Con mucha pasión, desde 🇦🇷</p>
       </footer>
     </div>
   );
