@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/accordion";
 import Image from "next/image";
 import GitHubCalendar from "react-github-calendar";
+import Portfolio from "@/assets/portfolio.jpg";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -239,7 +240,7 @@ export default function Home() {
               <GithubIcon />
             </a>
             <a
-              href="/cv.pdf" // Asegúrate de tener este archivo en tu carpeta pública o el enlace correcto
+              href={Portfolio.src} // Asegúrate de tener este archivo en tu carpeta pública o el enlace correcto
               className="bg-pink-500/80 text-white p-4 rounded-full shadow-lg hover:bg-pink-600 transition transform hover:scale-105 z-50"
               aria-label="Descargar CV"
             >
