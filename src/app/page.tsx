@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import product_version from "../../package.json"
 import {
   MailIcon,
   GithubIcon,
@@ -361,7 +362,8 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="text-center text-sm sm:text-base lg:text-lg py-4 mt-8 backdrop-blur-sm rounded-full p-4">
-        <p>© 2024 Gabriel Mattesich 🇦🇷</p>
+        <p>© 2024 Gabriel Mattesich 🇦🇷</p> <br />
+        <p>Version: {product_version.version}</p>
       </footer>
     </div>
   );
