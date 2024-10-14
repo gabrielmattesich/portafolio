@@ -18,11 +18,116 @@ import Image from "next/image";
 import GitHubCalendar from "react-github-calendar";
 import Portfolio from "@/assets/portfolio.jpg";
 
+const PageData = {
+  es: {
+    title: "Gabriel Mattesich - Portfolio",
+    description: "Portafolio de Gabriel Mattesich",
+    location: "Córdoba, Argentina",
+    contact: "",
+    skills: [
+      "Desarrollo de software",
+      "Programación orientada a eventos",
+      "Arquitectura de sistemas",
+    ],
+    summary: `Llevo más de 5 años trabajando en el área de sistemas, desempeñando diferentes roles principalmente en desarrollo de software. Mi enfoque está en el crecimiento profesional y la superación de desafíos, tanto individuales como grupales, para avanzar al siguiente nivel.`,
+    experience: [
+      {
+        company: "Naranja X",
+        role: "Software Developer",
+        period: "Noviembre de 2022 - Presente",
+        location: "Córdoba, Argentina",
+        description: [
+          "Desempeño de funciones en el desarrollo de soluciones con microservicios y arquitectura orientada a eventos.",
+        ],
+      },
+      {
+        company: "IncluIT",
+        role: "Software Developer",
+        period: "Noviembre de 2019 - Noviembre de 2022",
+        location: "Córdoba, Argentina",
+        description: [
+          "Desarrollo de soluciones utilizando microservicios.",
+          "Implementación de arquitectura dirigida por eventos.",
+          "Monitoreo con Datadog y gestión de operaciones con Opsgenie.",
+        ],
+      },
+      {
+        company: "Infosistemas",
+        role: "Software Developer",
+        period: "Septiembre de 2017 - Febrero de 2019",
+        location: "Río Cuarto, Córdoba, Argentina",
+        description: ["Desarrollo de sistemas personalizados para clientes."],
+      },
+    ],
+    education: [
+      "Coursera - Formación Profesional de Grado Superior en Tecnología de la Información (Enero de 2021)",
+      "edX - Programación informática, aplicaciones específicas (Julio de 2021 - Septiembre de 2021)",
+      "Amazon Web Services (AWS) - Introducción a la arquitectura en AWS (Julio de 2023)",
+      "Amazon Web Services (AWS) - Desarrollo avanzado en AWS (Agosto de 2023)",
+    ],
+    recommendations: `Gabriel ha demostrado ser un excelente colaborador, siempre enfocado en la calidad del software y la eficiencia en el trabajo en equipo. Su capacidad para enfrentar desafíos y su enfoque en el crecimiento personal y profesional lo destacan como un líder en el desarrollo de software.`,
+  },
+  en: {
+    title: "Gabriel Mattesich - Portfolio",
+    description: "Gabriel Mattesich's portfolio",
+    location: "Córdoba, Argentina",
+    contact: "",
+    skills: [
+      "Software development",
+      "Event-driven programming",
+      "Systems architecture",
+    ],
+    summary: `I have been working in the systems area for more than 5 years, performing different roles mainly in software development. My focus is on professional growth and overcoming challenges, both individual and group, to advance to the next level.`,
+    experience: [
+      {
+        company: "Naranja X",
+        role: "Software Developer",
+        period: "November 2022 - Present",
+        location: "Córdoba, Argentina",
+        description: [
+          "Performance of functions in the development of solutions with microservices and event-driven architecture.",
+        ],
+      },
+      {
+        company: "IncluIT",
+        role: "Software Developer",
+        period: "November 2019 - November 2022",
+        location: "Córdoba, Argentina",
+        description: [
+          "Development of solutions using microservices.",
+          "Implementation of event-driven architecture.",
+          "Monitoring with Datadog and operations management with Opsgenie.",
+        ],
+      },
+      {
+        company: "Infosistemas",
+        role: "Software Developer",
+        period: "September 2017 - February 2019",
+        location: "Río Cuarto, Córdoba, Argentina",
+        description: ["Development of custom systems for clients."],
+      },
+    ],
+    education: [
+      "Coursera - Higher Professional Training in Information Technology (January 2021)",
+      "edX - Computer programming, specific applications (July 2021 - September 2021)",
+      "Amazon Web Services (AWS) - Introduction to AWS architecture (July 2023)",
+      "Amazon Web Services (AWS) - Advanced development in AWS (August 2023)",
+    ],
+    recommendations: `Gabriel has proven to be an excellent collaborator, always focused on software quality and efficiency in teamwork. His ability to face challenges and his focus on personal and professional growth highlight him as a leader in software development.`,
+  },
+};
+
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [language, setLanguage] = useState<"es" | "en">("es");
+  const [metadata, setMetadata] = useState(PageData[language]);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const changeLanguage = (lang: "es" | "en") => {
+    setLanguage(lang);
+    setMetadata(PageData[lang]);
   };
 
   return (
@@ -43,24 +148,46 @@ export default function Home() {
 
         {/* Badges de aptitudes */}
       </div>
+      {/* Selección de idioma */}
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={() => changeLanguage("es")}
+          className={`px-4 py-2 rounded-l-full ${
+            language === "es"
+              ? "bg-slate-600/15 backdrop-blur-lg text-white"
+              : "bg-gray-400"
+          }`}
+        >
+          🇦🇷
+        </button>
+        <button
+          onClick={() => changeLanguage("en")}
+          className={`px-4 py-2 rounded-r-full ${
+            language === "en"
+              ? "bg-slate-600/15 backdrop-blur-lg"
+              : "bg-gray-400"
+          }`}
+        >
+          🇺🇸
+        </button>
+      </div>
 
       {/* Nombre y descripción */}
       <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-center mt-6">
-        Gabriel Mattesich
+        {metadata.title}
       </h1>
       <p className="text-center text-sm sm:text-base lg:text-lg mb-6">
-        Software developer | Córdoba, Argentina
+        {metadata.description} | {metadata.location}
       </p>
       <div className="flex flex-wrap justify-center gap-2 mt-4 sm:gap-3 sm:mt-6 lg:gap-4">
-        <span className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold">
-          Desarrollo de software
-        </span>
-        <span className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold">
-          Programación orientada a eventos
-        </span>
-        <span className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold">
-          Arquitectura de sistemas
-        </span>
+        {metadata.skills.map((skill, index) => (
+          <span
+            key={index}
+            className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold"
+          >
+            {skill}
+          </span>
+        ))}
       </div>
       {/* GitHub Activity */}
       <div className="mb-8 mx-auto max-w-md lg:max-w-4xl p-4">
@@ -74,17 +201,13 @@ export default function Home() {
           {/* Presentación */}
           <AccordionItem value="extract">
             <AccordionTrigger className="text-lg sm:text-xl lg:text-2xl font-bold">
-              Presentación
+              {language === "es" ? "Presentación" : "Summary"}
             </AccordionTrigger>
             <AccordionContent>
               <section className="mb-8">
                 <div className="p-4 sm:p-6 lg:p-8">
                   <p className="text-sm sm:text-base lg:text-lg">
-                    Llevo más de 5 años trabajando en el área de sistemas,
-                    desempeñando diferentes roles principalmente en desarrollo
-                    de software. Mi enfoque está en el crecimiento profesional y
-                    la superación de desafíos, tanto individuales como grupales,
-                    para avanzar al siguiente nivel.
+                    {metadata.summary}
                   </p>
                 </div>
               </section>
@@ -94,56 +217,57 @@ export default function Home() {
           {/* Experiencia */}
           <AccordionItem value="experience">
             <AccordionTrigger className="text-lg sm:text-xl lg:text-2xl font-bold">
-              Experiencia
+              {language === "es" ? "Experiencia" : "Experience"}
             </AccordionTrigger>
             <AccordionContent>
               <div className="mb-8">
                 <div className="p-4 sm:p-6 lg:p-8">
                   <div className="mb-4">
                     <h3 className="text-base sm:text-lg lg:text-xl font-semibold">
-                      Naranja X - Software Developer
+                      {metadata.experience[0].company} -{" "}
                     </h3>
                     <p className="text-gray-400 text-sm sm:text-base">
-                      Noviembre de 2022 - Presente | Córdoba, Argentina
+                      {metadata.experience[0].role} |{" "}
+                      {metadata.experience[0].period} |{" "}
+                      {metadata.experience[0].location}
                     </p>
                     <ul className="list-disc list-inside text-sm sm:text-base">
-                      <li>
-                        Desempeño de funciones en el desarrollo de soluciones
-                        con microservicios y arquitectura orientada a eventos.
-                      </li>
+                      {metadata.experience[0].description.map((desc, index) => (
+                        <li key={index}>{desc}</li>
+                      ))}
                     </ul>
                   </div>
                   <div className="mb-4">
                     <h3 className="text-base sm:text-lg lg:text-xl font-semibold">
-                      IncluIT - Software Developer
+                      {metadata.experience[1].company} -{" "}
+                      {metadata.experience[1].role}
                     </h3>
                     <p className="text-gray-400 text-sm sm:text-base">
-                      Noviembre de 2019 - Noviembre de 2022 | Córdoba, Argentina
+                      {metadata.experience[1].period} |{" "}
+                      {metadata.experience[1].location}
                     </p>
                     <ul className="list-disc list-inside text-sm sm:text-base">
-                      <li>
-                        Desarrollo de soluciones utilizando microservicios.
-                      </li>
-                      <li>
-                        Implementación de arquitectura dirigida por eventos.
-                      </li>
-                      <li>
-                        Monitoreo con Datadog y gestión de operaciones con
-                        Opsgenie.
-                      </li>
+                      {metadata.experience[1].description.map((desc, index) => (
+                        <li key={index}>{desc}</li>
+                      ))}
                     </ul>
                   </div>
                   <div className="mb-4">
                     <h3 className="text-base sm:text-lg lg:text-xl font-semibold">
-                      Infosistemas - Software Developer
+                      {metadata.experience[2].company} -{" "}
+                      {metadata.experience[2].role}
                     </h3>
                     <p className="text-gray-400 text-sm sm:text-base">
-                      Septiembre de 2017 - Febrero de 2019 | Río Cuarto,
-                      Córdoba, Argentina
+                      {metadata.experience[2].period} |{" "}
+                      {metadata.experience[2].location}
                     </p>
                     <ul className="list-disc list-inside text-sm sm:text-base">
                       <li>
-                        Desarrollo de sistemas personalizados para clientes.
+                        {metadata.experience[2].description.map(
+                          (desc, index) => (
+                            <li key={index}>{desc}</li>
+                          )
+                        )}
                       </li>
                     </ul>
                   </div>
@@ -155,27 +279,14 @@ export default function Home() {
           {/* Educación */}
           <AccordionItem value="education">
             <AccordionTrigger className="text-lg sm:text-xl lg:text-2xl font-bold">
-              Educación
+              {language === "es" ? "Educación" : "Education"}
             </AccordionTrigger>
             <AccordionContent>
               <div className="mb-8 p-4 sm:p-6 lg:p-8">
                 <ul className="list-disc list-inside text-sm sm:text-base lg:text-lg">
-                  <li>
-                    Coursera - Formación Profesional de Grado Superior en
-                    Tecnología de la Información (Enero de 2021)
-                  </li>
-                  <li>
-                    edX - Programación informática, aplicaciones específicas
-                    (Julio de 2021 - Septiembre de 2021)
-                  </li>
-                  <li>
-                    Amazon Web Services (AWS) - Introducción a la arquitectura
-                    en AWS (Julio de 2023)
-                  </li>
-                  <li>
-                    Amazon Web Services (AWS) - Desarrollo avanzado en AWS
-                    (Agosto de 2023)
-                  </li>
+                  {metadata.education.map((edu, index) => (
+                    <li key={index}>{edu}</li>
+                  ))}
                 </ul>
               </div>
             </AccordionContent>
@@ -184,16 +295,12 @@ export default function Home() {
           {/* Recomendaciones */}
           <AccordionItem value="recommendations">
             <AccordionTrigger className="text-lg sm:text-xl lg:text-2xl font-bold">
-              Recomendaciones
+              {language === "es" ? "Recomendaciones" : "Recommendations"}
             </AccordionTrigger>
             <AccordionContent>
               <div className="mb-8 p-4 sm:p-6 lg:p-8">
                 <p className="text-sm sm:text-base lg:text-lg">
-                  Gabriel ha demostrado ser un excelente colaborador, siempre
-                  enfocado en la calidad del software y la eficiencia en el
-                  trabajo en equipo. Su capacidad para enfrentar desafíos y su
-                  enfoque en el crecimiento personal y profesional lo destacan
-                  como un líder en el desarrollo de software.
+                  {metadata.recommendations}
                 </p>
               </div>
             </AccordionContent>
@@ -207,6 +314,7 @@ export default function Home() {
       )}
       {/* Botón flotante principal */}
       <div className="fixed right-8 bottom-8 flex flex-col gap-4 z-50">
+        
         <button
           onClick={toggleMenu}
           className="bg-violet-500/80 text-white p-4 rounded-full shadow-lg hover:bg-violet-600 transition transform hover:scale-105 z-50"
@@ -214,16 +322,17 @@ export default function Home() {
         >
           {isOpen ? <XIcon /> : <MenuIcon />}
         </button>
-
         {/* Opciones desplegables */}
         {isOpen && (
           <div className="flex flex-col gap-4 mt-4 z-50">
             <a
               href="https://www.linkedin.com/in/gabriel-mattesich"
-              className="bg-blue-500/80 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-105 z-50"
+              className="bg-blue-500/80 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-105 z-50 flex- flex-item"
               aria-label="LinkedIn"
             >
-              <LinkedinIcon />
+              <div>
+                <LinkedinIcon />
+              </div>
             </a>
             <a
               href="mailto:mattesichgabriel@gmail.com"
@@ -252,7 +361,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="text-center text-sm sm:text-base lg:text-lg py-4 mt-8 backdrop-blur-sm rounded-full p-4">
-        <p>Con mucha pasión, desde 🇦🇷</p>
+        <p>© 2024 Gabriel Mattesich 🇦🇷.</p>
       </footer>
     </div>
   );
