@@ -361,7 +361,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="text-center text-sm sm:text-base lg:text-lg py-4 mt-8 backdrop-blur-sm rounded-full p-4">
-        <p>© 2024 Gabriel Mattesich 🇦🇷.</p>
+        <p>© 2024 Gabriel Mattesich 🇦🇷</p>
       </footer>
     </div>
   );
