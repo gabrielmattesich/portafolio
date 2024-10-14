@@ -158,7 +158,7 @@ export default function Home() {
               : "bg-gray-400"
           }`}
         >
-          🇦🇷
+          🇦🇷 | ES
         </button>
         <button
           onClick={() => changeLanguage("en")}
@@ -168,7 +168,7 @@ export default function Home() {
               : "bg-gray-400"
           }`}
         >
-          🇺🇸
+          🌎 | EN
         </button>
       </div>
 
