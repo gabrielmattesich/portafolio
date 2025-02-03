@@ -18,7 +18,7 @@ import {
 import Image from "next/image";
 import GitHubCalendar from "react-github-calendar";
 import Portfolio from "@/assets/portfolio.jpg";
-import Profile from "@/assets/profile.jpg";
+import Profile from "@/assets/profile.png";
 const PageData = {
   es: {
     title: "Gabriel Mattesich - Portfolio",
