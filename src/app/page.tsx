@@ -18,7 +18,7 @@ import {
 import Image from "next/image";
 import GitHubCalendar from "react-github-calendar";
 import Portfolio from "@/assets/portfolio.jpg";
-
+import Profile from "@/assets/profile.jpg";
 const PageData = {
   es: {
     title: "Gabriel Mattesich - Portfolio",
@@ -140,7 +140,7 @@ export default function Home() {
       {/* Imagen de perfil */}
       <div className="flex flex-col items-center px-4">
         <Image
-          src="https://media.licdn.com/dms/image/v2/C4D03AQFx4sZzuf1tUA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1656751574176?e=1731542400&v=beta&t=UBCzOfEf3b7pxO8aqxZkOC7EI0MMhjep_RF0KnnXowA"
+          src={Profile.src}
           alt="Gabriel Mattesich"
           width={150}
           height={150}
