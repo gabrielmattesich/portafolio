@@ -1,6 +1,6 @@
 "use client";
-import portafolio from '../../package.json'
-import profile from "@/assets/profile.png"
+import portafolio from "../../package.json";
+import profile from "@/assets/profile.png";
 import { useState, useEffect } from "react";
 import {
   Mail,
@@ -24,8 +24,8 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { pageData } from "@/lib/portafolio-data";
 import AnimatedBackground from "@/components/animated-background";
-import { Button } from '@/components/ui/button';
-import CVDownloadDialog from '@/components/cv-download';
+import { Button } from "@/components/ui/button";
+import CVDownloadDialog from "@/components/cv-download";
 
 export default function Portfolio() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +33,7 @@ export default function Portfolio() {
   const [metadata, setMetadata] = useState(pageData[language]);
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [showCVDialog, setShowCVDialog] = useState(false)
+  const [showCVDialog, setShowCVDialog] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -50,10 +50,10 @@ export default function Portfolio() {
     setLanguage(lang);
   };
   const handleCVDownload = () => {
-    setShowCVDialog(true)
+    setShowCVDialog(true);
     // Close the floating menu when opening the CV dialog
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   if (!mounted) return null;
 
@@ -67,31 +67,20 @@ export default function Portfolio() {
         <div className="container mx-auto px-4 py-16 relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex-1 text-center md:text-left">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-lime-400 to-indigo-600">
                   Gabriel Mattesich
                 </h1>
-                <h2 className="text-xl md:text-2xl font-medium text-slate-300 mb-6">Software Developer</h2>
-                <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-8">
-                  {metadata.skills.map((skill, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="bg-slate-800/60 hover:bg-slate-700/60 text-white px-3 py-1 text-sm"
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
+                <h2 className="text-xl md:text-2xl font-medium text-slate-300 mb-6">
+                  Software Developer
+                </h2>
                 <div className="flex items-center gap-2 justify-center md:justify-start mb-4 text-slate-300">
                   <MapPin size={16} className="text-lime-400" />
                   <span>{metadata.location}</span>
-                </div>
-                <div className="mt-6">
-                  <Button onClick={handleCVDownload} className="bg-lime-600 hover:bg-lime-700 text-white">
-                    <FileDown className="mr-2 h-4 w-4" />
-                    {language === "es" ? "Descargar CV" : "Download CV"}
-                  </Button>
                 </div>
               </motion.div>
             </div>
@@ -101,7 +90,7 @@ export default function Portfolio() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="relative"
             >
-              <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-lime-500/20 shadow-xl">
+              <div className="w-48 h-48 md:w-64 md:h-64 rounded-md overflow-hidden border-4 border-lime-500/20 shadow-xl">
                 <Image
                   src={profile.src}
                   alt="Gabriel Mattesich"
@@ -111,26 +100,41 @@ export default function Portfolio() {
                   priority
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 bg-slate-800 rounded-full p-2 shadow-lg">
-                <div className="flex space-x-1">
-                  <button
-                    onClick={() => changeLanguage("es")}
-                    className={cn(
-                      "px-2 py-1 rounded-l-md text-xs font-medium transition-colors",
-                      language === "es" ? "bg-lime-600 text-white" : "bg-slate-700 text-slate-300 hover:bg-slate-600",
-                    )}
+
+              <div className="mt-10 bottom-2 right-2 sm:bottom-4 sm:right-4 bg-slate-800/30 rounded-md p-3 shadow-lg">
+                <div className="flex flex-col md:flex-row gap-2 items-center">
+                  <div className="flex space-x-1">
+                    <button
+                      onClick={() => changeLanguage("es")}
+                      className={cn(
+                        "px-3 py-1 rounded-l-md text-xs font-medium transition-colors",
+                        language === "es"
+                          ? "bg-lime-600 text-white"
+                          : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                      )}
+                    >
+                      🇦🇷 ES
+                    </button>
+                    <button
+                      onClick={() => changeLanguage("en")}
+                      className={cn(
+                        "px-3 py-1 rounded-r-md text-xs font-medium transition-colors",
+                        language === "en"
+                          ? "bg-lime-600 text-white"
+                          : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                      )}
+                    >
+                      🌎 EN
+                    </button>
+                  </div>
+
+                  <Button
+                    onClick={handleCVDownload}
+                    className="bg-lime-600 hover:bg-lime-700 text-white px-4 py-2 text-xs md:text-sm mt-2 md:mt-0"
                   >
-                    🇦🇷 ES
-                  </button>
-                  <button
-                    onClick={() => changeLanguage("en")}
-                    className={cn(
-                      "px-2 py-1 rounded-r-md text-xs font-medium transition-colors",
-                      language === "en" ? "bg-lime-600 text-white" : "bg-slate-700 text-slate-300 hover:bg-slate-600",
-                    )}
-                  >
-                    🌎 EN
-                  </button>
+                    <FileDown className="mr-2 h-4 w-4" />
+                    {language === "es" ? "Descargar CV" : "Download CV"}
+                  </Button>
                 </div>
               </div>
             </motion.div>
@@ -147,11 +151,18 @@ export default function Portfolio() {
               {language === "es" ? "Actividad en GitHub" : "GitHub Activity"}
             </h2>
             <p className="text-slate-400">
-              {language === "es" ? "Mi historial de contribuciones" : "My contribution history"}
+              {language === "es"
+                ? "Mi historial de contribuciones"
+                : "My contribution history"}
             </p>
           </div>
           <div className="bg-slate-800/40 backdrop-blur-sm rounded-xl p-6 shadow-lg max-w-4xl mx-auto overflow-x-auto">
-            <GitHubCalendar username="gabrielmattesich" colorScheme="light" hideColorLegend hideMonthLabels={false} />
+            <GitHubCalendar
+              username="gabrielmattesich"
+              colorScheme="light"
+              hideColorLegend
+              hideMonthLabels={false}
+            />
           </div>
         </div>
       </section>
@@ -161,28 +172,48 @@ export default function Portfolio() {
         <div className="container mx-auto px-4">
           <Tabs defaultValue="summary" className="max-w-4xl mx-auto">
             <TabsList className="grid grid-cols-4 mb-8">
-              <TabsTrigger value="summary" onClick={() => setActiveSection("summary")}>
+              <TabsTrigger
+                value="summary"
+                onClick={() => setActiveSection("summary")}
+              >
                 <span className="flex items-center">
                   <Star className="mr-2 h-4 w-4" />
-                  <span className="hidden sm:inline">{language === "es" ? "Presentación" : "Summary"}</span>
+                  <span className="hidden sm:inline">
+                    {language === "es" ? "Presentación" : "Summary"}
+                  </span>
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="experience" onClick={() => setActiveSection("experience")}>
+              <TabsTrigger
+                value="experience"
+                onClick={() => setActiveSection("experience")}
+              >
                 <span className="flex items-center">
                   <Briefcase className="mr-2 h-4 w-4" />
-                  <span className="hidden sm:inline">{language === "es" ? "Experiencia" : "Experience"}</span>
+                  <span className="hidden sm:inline">
+                    {language === "es" ? "Experiencia" : "Experience"}
+                  </span>
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="education" onClick={() => setActiveSection("education")}>
+              <TabsTrigger
+                value="education"
+                onClick={() => setActiveSection("education")}
+              >
                 <span className="flex items-center">
                   <GraduationCap className="mr-2 h-4 w-4" />
-                  <span className="hidden sm:inline">{language === "es" ? "Educación" : "Education"}</span>
+                  <span className="hidden sm:inline">
+                    {language === "es" ? "Educación" : "Education"}
+                  </span>
                 </span>
               </TabsTrigger>
-              <TabsTrigger value="recommendations" onClick={() => setActiveSection("recommendations")}>
+              <TabsTrigger
+                value="recommendations"
+                onClick={() => setActiveSection("recommendations")}
+              >
                 <span className="flex items-center">
                   <Star className="mr-2 h-4 w-4" />
-                  <span className="hidden sm:inline">{language === "es" ? "Recomendaciones" : "Recommendations"}</span>
+                  <span className="hidden sm:inline">
+                    {language === "es" ? "Recomendaciones" : "Recommendations"}
+                  </span>
                 </span>
               </TabsTrigger>
             </TabsList>
@@ -198,7 +229,9 @@ export default function Portfolio() {
                     {language === "es" ? "Presentación" : "Summary"}
                   </h3>
                   <div className="prose prose-invert max-w-none">
-                    <p className="text-slate-300 whitespace-pre-line">{metadata.summary}</p>
+                    <p className="text-slate-300 whitespace-pre-line">
+                      {metadata.summary}
+                    </p>
                   </div>
                 </motion.div>
               </TabsContent>
@@ -210,17 +243,37 @@ export default function Portfolio() {
                   transition={{ duration: 0.5 }}
                 >
                   <h3 className="text-2xl font-bold mb-6 text-lime-400">
-                    {language === "es" ? "Experiencia Profesional" : "Professional Experience"}
+                    {language === "es"
+                      ? "Experiencia Profesional"
+                      : "Professional Experience"}
                   </h3>
 
                   <div className="space-y-8">
                     {metadata.experience.map((exp, index) => (
-                      <Card key={index} className="bg-slate-800/40 border-slate-700">
+                      <Card
+                        key={index}
+                        className="bg-slate-800/40 border-slate-700"
+                      >
                         <CardContent className="p-6">
                           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                             <div>
-                              <h4 className="text-xl font-bold text-white">{exp.company}</h4>
-                              <p className="text-lime-400 font-medium">{exp.role}</p>
+                              <h4 className="text-xl font-bold text-white">
+                                {exp.company}
+                              </h4>
+                              <p className="text-lime-400 font-medium">
+                                {exp.role}
+                              </p>
+                              {exp.tools && (
+                                <div className="mt-6">
+                                  <hr className="text-primary" />
+
+                                  {exp.tools.map((tool: string) => (
+                                    <Badge key={tool} className="ml-1 mr-1">
+                                      {tool}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                             <div className="flex flex-col items-start md:items-end text-sm text-slate-400">
                               <div className="flex items-center">
@@ -243,9 +296,13 @@ export default function Portfolio() {
                           </ul>
 
                           {exp.conclusion && (
-                            <p className="mt-4 text-slate-300 italic border-l-2 border-lime-500 pl-4">
-                              {exp.conclusion}
-                            </p>
+                            <div className="mt-6">
+                              <hr className="text-primary" />
+
+                              <p className="mt-4 text-slate-300 italic border-l-2 border-lime-500 pl-4">
+                                {exp.conclusion}
+                              </p>
+                            </div>
                           )}
                         </CardContent>
                       </Card>
@@ -261,12 +318,17 @@ export default function Portfolio() {
                   transition={{ duration: 0.5 }}
                 >
                   <h3 className="text-2xl font-bold mb-6 text-lime-400">
-                    {language === "es" ? "Educación y Certificaciones" : "Education & Certifications"}
+                    {language === "es"
+                      ? "Educación y Certificaciones"
+                      : "Education & Certifications"}
                   </h3>
 
                   <div className="space-y-4">
                     {metadata.education.map((edu, index) => (
-                      <div key={index} className="bg-slate-800/40 p-4 rounded-lg border-l-4 border-lime-500">
+                      <div
+                        key={index}
+                        className="bg-slate-800/40 p-4 rounded-lg border-l-4 border-lime-500"
+                      >
                         <p className="text-slate-300">{edu}</p>
                       </div>
                     ))}
@@ -286,7 +348,9 @@ export default function Portfolio() {
 
                   <div className="bg-slate-800/40 p-6 rounded-lg border border-slate-700">
                     <blockquote className="relative">
-                      <p className="text-slate-300 relative z-10 pl-6 pt-4">{metadata.recommendations}</p>
+                      <p className="text-slate-300 relative z-10 pl-6 pt-4">
+                        {metadata.recommendations}
+                      </p>
                     </blockquote>
                   </div>
                 </motion.div>
@@ -382,13 +446,21 @@ export default function Portfolio() {
       </AnimatePresence>
 
       {/* CV Download Dialog */}
-      <CVDownloadDialog open={showCVDialog} onOpenChange={setShowCVDialog} language={language} />
+      <CVDownloadDialog
+        open={showCVDialog}
+        onOpenChange={setShowCVDialog}
+        language={language}
+      />
 
       {/* Footer */}
       <footer className="py-8 bg-slate-950">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-slate-400">© {new Date().getFullYear()} Gabriel Mattesich 🇦🇷</p>
-          <p className="text-slate-500 text-sm mt-2">{language === "es" ? "Versión" : "Version"}: {portafolio.version}</p>
+          <p className="text-slate-400">
+            © {new Date().getFullYear()} Gabriel Mattesich 🇦🇷
+          </p>
+          <p className="text-slate-500 text-sm mt-2">
+            {language === "es" ? "Versión" : "Version"}: {portafolio.version}
+          </p>
         </div>
       </footer>
     </div>

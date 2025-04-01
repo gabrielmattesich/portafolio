@@ -27,7 +27,7 @@ export const pageData = {
         {
           company: "Naranja X",
           role: "Software Developer",
-          period: "Noviembre de 2022 - Presente",
+          period: "Noviembre de 2022 - Abril de 2025",
           location: "Córdoba, Argentina",
           conclusion:
             "Han sido años de un crecimiento vertiginoso, siguiendo los estándares de la industria potenciados por tecnologías modernas y una constante evolución en nuestro modelo de negocio lo que permitió desarrollar una flexibilidad increíble en esta área que evoluciona a un ritmo excepcional.",
@@ -40,13 +40,29 @@ export const pageData = {
             "He colaborado en certificaciones de los estándares de la industria de tarjetas (PCI DSS v3 y v4).",
             "He colaborado en proyectos ágiles siguiendo metodologías como Scrum, lo cual nos permitía medir nuestro impacto como también facilitar la conclusión de nuestros objetivos.",
           ],
+          tools: [
+            "Desarrollo de software",
+            "Arquitectura de sistemas",
+            "Cloud Native",
+            "DevOps",
+            "Amazon web services",
+            "Serverless",
+            "TypeScript",
+          ]
         },
         {
           company: "IncluIT",
           role: "Software Developer",
           period: "Noviembre de 2019 - Noviembre de 2022",
           location: "Córdoba, Argentina",
-          conclusion: "",
+          conclusion: "Fueron años de mucho aprendizaje, acompañado de un grupo de profesionales excepcionales predispuestos a colaborar y crear impacto en diferentes areas. Me he desarrollado como desarrollador de software acompañado de una proactividad fomentada por el equipo de trabajo.",
+          tools: [
+            "Desarrollo de software",
+            "Microservicios",
+            "Amazon web services",
+            "Serverless",
+            "Javascript",
+          ],
           description: [
             "Desarrollo de soluciones utilizando microservicios.",
             "Implementación de arquitectura dirigida por eventos.",
@@ -58,7 +74,12 @@ export const pageData = {
           role: "Software Developer",
           period: "Septiembre de 2017 - Febrero de 2019",
           location: "Río Cuarto, Córdoba, Argentina",
-          conclusion: "",
+          conclusion: "El inicio, cuando ingresé a la universidad tuve la posibilidad de acceder a mi primera experiencia laboral (PPP: Un programa muy visionario de la provincia de Córdoba, Argentina. Donde fomenta que las empresas locales contraten potenciales profesionales de diferentes areas con financiamento del gobierno.), luego de mi primer cuatrimestre ya me encontraba llevando a cabo mis primeras lineas de código acompañado de un grupo de profesionales muy predipuestos a acompañarme en el crecimiento en esta nueva area para mi en aquel entonces.",
+          tools: [
+            "Desarrollo de software",
+            "Genexus",
+            "Javascript",
+          ],
           description: ["Desarrollo de sistemas personalizados para clientes."],
         },
       ],
@@ -94,7 +115,7 @@ export const pageData = {
         {
           company: "Naranja X",
           role: "Software Developer",
-          period: "November 2022 - Present",
+          period: "November 2022 - April 2025",
           location: "Córdoba, Argentina",
           conclusion:
             "These have been years of vertiginous growth, following industry standards powered by modern technologies and a constant evolution in our business model, which allowed us to develop incredible flexibility in this area that evolves at an exceptional pace.",
@@ -107,25 +128,46 @@ export const pageData = {
             "I have supported the certification process for industry-standard card security compliance (PCI DSS v3 and v4).",
             "I have collaborated on agile projects following methodologies such as Scrum, which allowed us to measure our impact as well as facilitate the achievement of our objectives.",
           ],
+          tools: [
+            "Desarrollo de software",
+            "Arquitectura de sistemas",
+            "Cloud Native",
+            "DevOps",
+            "Amazon web services",
+            "Serverless",
+            "TypeScript",
+          ]
         },
         {
           company: "IncluIT",
           role: "Software Developer",
           period: "November 2019 - November 2022",
           location: "Córdoba, Argentina",
-          conclusion: "",
+          conclusion: "It has been years of great learning, accompanied by a group of exceptional professionals willing to collaborate and create an impact in different areas. I have grown as a software developer, driven by a proactive mindset fostered by the team.",
           description: [
             "Development of solutions using microservices.",
             "Implementation of event-driven architecture.",
             "Monitoring with Datadog and operations management with Opsgenie.",
           ],
+          tools: [
+            "Desarrollo de software",
+            "Microservicios",
+            "Amazon web services",
+            "Serverless",
+            "Javascript",
+          ]
         },
         {
           company: "Infosistemas",
           role: "Software Developer",
           period: "September 2017 - February 2019",
           location: "Río Cuarto, Córdoba, Argentina",
-          conclusion: "",
+          conclusion: "When I entered university, I had the opportunity to access my first work experience through the PPP program—a visionary initiative from the province of Córdoba, Argentina. This program encourages local companies to hire potential professionals from various fields with government funding. After my first semester, I was already writing my first lines of code, supported by a team of highly committed professionals who guided me in my growth within this new field at the time.",
+          tools: [
+            "Desarrollo de software",
+            "Genexus",
+            "JavaScript",
+          ],
           description: ["Development of custom systems for clients."],
         },
       ],

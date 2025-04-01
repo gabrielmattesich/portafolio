@@ -90,7 +90,7 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] h-3/4 bg-slate-900 border-slate-700 text-white">
+      <DialogContent className="sm:max-w-[600px] h-auto overflow-y-auto bg-slate-900 border-slate-700 text-white">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-2 text-lime-400">
             <FileText className="h-6 w-6" />
