@@ -1,369 +1,395 @@
 "use client";
-import { useState } from "react";
-import product_version from "../../package.json"
+import portafolio from '../../package.json'
+import profile from "@/assets/profile.png"
+import { useState, useEffect } from "react";
 import {
-  MailIcon,
-  GithubIcon,
-  LinkedinIcon,
-  FileDownIcon,
-  MenuIcon,
-  XIcon,
+  Mail,
+  Github,
+  Linkedin,
+  FileDown,
+  Menu,
+  X,
+  MapPin,
+  Calendar,
+  Briefcase,
+  GraduationCap,
+  Star,
 } from "lucide-react";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
-import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { motion, AnimatePresence } from "framer-motion";
 import GitHubCalendar from "react-github-calendar";
-import Portfolio from "@/assets/portfolio.jpg";
-import Profile from "@/assets/profile.png";
-const PageData = {
-  es: {
-    title: "Gabriel Mattesich - Portfolio",
-    description: "Portafolio de Gabriel Mattesich",
-    location: "Córdoba, Argentina",
-    contact: "",
-    skills: [
-      "Desarrollo de software",
-      "Programación orientada a eventos",
-      "Arquitectura de sistemas",
-    ],
-    summary: `Llevo más de 5 años trabajando en el área de sistemas, desempeñando diferentes roles principalmente en desarrollo de software. Mi enfoque está en el crecimiento profesional y la superación de desafíos, tanto individuales como grupales, para avanzar al siguiente nivel.`,
-    experience: [
-      {
-        company: "Naranja X",
-        role: "Software Developer",
-        period: "Noviembre de 2022 - Presente",
-        location: "Córdoba, Argentina",
-        description: [
-          "Desempeño de funciones en el desarrollo de soluciones con microservicios y arquitectura orientada a eventos.",
-        ],
-      },
-      {
-        company: "IncluIT",
-        role: "Software Developer",
-        period: "Noviembre de 2019 - Noviembre de 2022",
-        location: "Córdoba, Argentina",
-        description: [
-          "Desarrollo de soluciones utilizando microservicios.",
-          "Implementación de arquitectura dirigida por eventos.",
-          "Monitoreo con Datadog y gestión de operaciones con Opsgenie.",
-        ],
-      },
-      {
-        company: "Infosistemas",
-        role: "Software Developer",
-        period: "Septiembre de 2017 - Febrero de 2019",
-        location: "Río Cuarto, Córdoba, Argentina",
-        description: ["Desarrollo de sistemas personalizados para clientes."],
-      },
-    ],
-    education: [
-      "Coursera - Formación Profesional de Grado Superior en Tecnología de la Información (Enero de 2021)",
-      "edX - Programación informática, aplicaciones específicas (Julio de 2021 - Septiembre de 2021)",
-      "Amazon Web Services (AWS) - Introducción a la arquitectura en AWS (Julio de 2023)",
-      "Amazon Web Services (AWS) - Desarrollo avanzado en AWS (Agosto de 2023)",
-    ],
-    recommendations: `Gabriel ha demostrado ser un excelente colaborador, siempre enfocado en la calidad del software y la eficiencia en el trabajo en equipo. Su capacidad para enfrentar desafíos y su enfoque en el crecimiento personal y profesional lo destacan como un líder en el desarrollo de software.`,
-  },
-  en: {
-    title: "Gabriel Mattesich - Portfolio",
-    description: "Gabriel Mattesich's portfolio",
-    location: "Córdoba, Argentina",
-    contact: "",
-    skills: [
-      "Software development",
-      "Event-driven programming",
-      "Systems architecture",
-    ],
-    summary: `I have been working in the systems area for more than 5 years, performing different roles mainly in software development. My focus is on professional growth and overcoming challenges, both individual and group, to advance to the next level.`,
-    experience: [
-      {
-        company: "Naranja X",
-        role: "Software Developer",
-        period: "November 2022 - Present",
-        location: "Córdoba, Argentina",
-        description: [
-          "Performance of functions in the development of solutions with microservices and event-driven architecture.",
-        ],
-      },
-      {
-        company: "IncluIT",
-        role: "Software Developer",
-        period: "November 2019 - November 2022",
-        location: "Córdoba, Argentina",
-        description: [
-          "Development of solutions using microservices.",
-          "Implementation of event-driven architecture.",
-          "Monitoring with Datadog and operations management with Opsgenie.",
-        ],
-      },
-      {
-        company: "Infosistemas",
-        role: "Software Developer",
-        period: "September 2017 - February 2019",
-        location: "Río Cuarto, Córdoba, Argentina",
-        description: ["Development of custom systems for clients."],
-      },
-    ],
-    education: [
-      "Coursera - Higher Professional Training in Information Technology (January 2021)",
-      "edX - Computer programming, specific applications (July 2021 - September 2021)",
-      "Amazon Web Services (AWS) - Introduction to AWS architecture (July 2023)",
-      "Amazon Web Services (AWS) - Advanced development in AWS (August 2023)",
-    ],
-    recommendations: `Gabriel has proven to be an excellent collaborator, always focused on software quality and efficiency in teamwork. His ability to face challenges and his focus on personal and professional growth highlight him as a leader in software development.`,
-  },
-};
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { pageData } from "@/lib/portafolio-data";
+import AnimatedBackground from "@/components/animated-background";
+import { Button } from '@/components/ui/button';
+import CVDownloadDialog from '@/components/cv-download';
 
-export default function Home() {
+export default function Portfolio() {
   const [isOpen, setIsOpen] = useState(false);
   const [language, setLanguage] = useState<"es" | "en">("es");
-  const [metadata, setMetadata] = useState(PageData[language]);
+  const [metadata, setMetadata] = useState(pageData[language]);
+  const [mounted, setMounted] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [showCVDialog, setShowCVDialog] = useState(false)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    setMetadata(pageData[language]);
+  }, [language]);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
   const changeLanguage = (lang: "es" | "en") => {
     setLanguage(lang);
-    setMetadata(PageData[lang]);
   };
+  const handleCVDownload = () => {
+    setShowCVDialog(true)
+    // Close the floating menu when opening the CV dialog
+    setIsOpen(false)
+  }
+
+  if (!mounted) return null;
 
   return (
-    <div
-      className={`bg-slate-950/60 backdrop-blur-md text-white ${
-        isOpen ? "backdrop-filter backdrop-blur-md" : ""
-      }`}
-    >
-      {/* Imagen de perfil */}
-      <div className="flex flex-col items-center px-4">
-        <Image
-          src={Profile.src}
-          alt="Gabriel Mattesich"
-          width={150}
-          height={150}
-          className="rounded-full border-2 border-white shadow-lg mt-6 sm:w-40 sm:h-40 lg:w-48 lg:h-48"
-        />
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden">
+        {/* Animated Background */}
+        <AnimatedBackground />
 
-        {/* Badges de aptitudes */}
-      </div>
-      {/* Selección de idioma */}
-      <div className="flex justify-center mt-4">
-        <button
-          onClick={() => changeLanguage("es")}
-          className={`px-4 py-2 rounded-l-full ${
-            language === "es"
-              ? "bg-slate-600/15 backdrop-blur-lg text-white"
-              : "bg-gray-400"
-          }`}
-        >
-          🇦🇷 | ES
-        </button>
-        <button
-          onClick={() => changeLanguage("en")}
-          className={`px-4 py-2 rounded-r-full ${
-            language === "en"
-              ? "bg-slate-600/15 backdrop-blur-lg"
-              : "bg-gray-400"
-          }`}
-        >
-          🌎 | EN
-        </button>
-      </div>
-
-      {/* Nombre y descripción */}
-      <h1 className="text-3xl sm:text-4xl font-bold mb-2 text-center mt-6">
-        {metadata.title}
-      </h1>
-      <p className="text-center text-sm sm:text-base lg:text-lg mb-6">
-        {metadata.description} | {metadata.location}
-      </p>
-      <div className="flex flex-wrap justify-center gap-2 mt-4 sm:gap-3 sm:mt-6 lg:gap-4">
-        {metadata.skills.map((skill, index) => (
-          <span
-            key={index}
-            className="bg-slate-900 text-white px-4 py-2 rounded-full text-xs sm:text-sm lg:text-base font-bold"
-          >
-            {skill}
-          </span>
-        ))}
-      </div>
-      {/* GitHub Activity */}
-      <div className="mb-8 mx-auto max-w-md lg:max-w-4xl p-4">
-        <GitHubCalendar username="gabrielmattesich" colorScheme="light" />
-      </div>
-
-      {/* Contenido */}
-      <div className="mx-auto p-4 sm:p-6 lg:p-8 max-w-md lg:max-w-4xl bg-slate-950/40 backdrop-blur-md rounded-md">
-        {/* Accordion for sections */}
-        <Accordion type="single" collapsible>
-          {/* Presentación */}
-          <AccordionItem value="extract">
-            <AccordionTrigger className="text-lg sm:text-xl lg:text-2xl font-bold">
-              {language === "es" ? "Presentación" : "Summary"}
-            </AccordionTrigger>
-            <AccordionContent>
-              <section className="mb-8">
-                <div className="p-4 sm:p-6 lg:p-8">
-                  <p className="text-sm sm:text-base lg:text-lg">
-                    {metadata.summary}
-                  </p>
-                </div>
-              </section>
-            </AccordionContent>
-          </AccordionItem>
-
-          {/* Experiencia */}
-          <AccordionItem value="experience">
-            <AccordionTrigger className="text-lg sm:text-xl lg:text-2xl font-bold">
-              {language === "es" ? "Experiencia" : "Experience"}
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="mb-8">
-                <div className="p-4 sm:p-6 lg:p-8">
-                  <div className="mb-4">
-                    <h3 className="text-base sm:text-lg lg:text-xl font-semibold">
-                      {metadata.experience[0].company} -{" "}
-                    </h3>
-                    <p className="text-gray-400 text-sm sm:text-base">
-                      {metadata.experience[0].role} |{" "}
-                      {metadata.experience[0].period} |{" "}
-                      {metadata.experience[0].location}
-                    </p>
-                    <ul className="list-disc list-inside text-sm sm:text-base">
-                      {metadata.experience[0].description.map((desc, index) => (
-                        <li key={index}>{desc}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="mb-4">
-                    <h3 className="text-base sm:text-lg lg:text-xl font-semibold">
-                      {metadata.experience[1].company} -{" "}
-                      {metadata.experience[1].role}
-                    </h3>
-                    <p className="text-gray-400 text-sm sm:text-base">
-                      {metadata.experience[1].period} |{" "}
-                      {metadata.experience[1].location}
-                    </p>
-                    <ul className="list-disc list-inside text-sm sm:text-base">
-                      {metadata.experience[1].description.map((desc, index) => (
-                        <li key={index}>{desc}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="mb-4">
-                    <h3 className="text-base sm:text-lg lg:text-xl font-semibold">
-                      {metadata.experience[2].company} -{" "}
-                      {metadata.experience[2].role}
-                    </h3>
-                    <p className="text-gray-400 text-sm sm:text-base">
-                      {metadata.experience[2].period} |{" "}
-                      {metadata.experience[2].location}
-                    </p>
-                    <ul className="list-disc list-inside text-sm sm:text-base">
-                      <li>
-                        {metadata.experience[2].description.map(
-                          (desc, index) => (
-                            <li key={index}>{desc}</li>
-                          )
-                        )}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
-          {/* Educación */}
-          <AccordionItem value="education">
-            <AccordionTrigger className="text-lg sm:text-xl lg:text-2xl font-bold">
-              {language === "es" ? "Educación" : "Education"}
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="mb-8 p-4 sm:p-6 lg:p-8">
-                <ul className="list-disc list-inside text-sm sm:text-base lg:text-lg">
-                  {metadata.education.map((edu, index) => (
-                    <li key={index}>{edu}</li>
+        <div className="container mx-auto px-4 py-16 relative z-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex-1 text-center md:text-left">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-lime-400 to-indigo-600">
+                  Gabriel Mattesich
+                </h1>
+                <h2 className="text-xl md:text-2xl font-medium text-slate-300 mb-6">Software Developer</h2>
+                <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-8">
+                  {metadata.skills.map((skill, index) => (
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="bg-slate-800/60 hover:bg-slate-700/60 text-white px-3 py-1 text-sm"
+                    >
+                      {skill}
+                    </Badge>
                   ))}
-                </ul>
+                </div>
+                <div className="flex items-center gap-2 justify-center md:justify-start mb-4 text-slate-300">
+                  <MapPin size={16} className="text-lime-400" />
+                  <span>{metadata.location}</span>
+                </div>
+                <div className="mt-6">
+                  <Button onClick={handleCVDownload} className="bg-lime-600 hover:bg-lime-700 text-white">
+                    <FileDown className="mr-2 h-4 w-4" />
+                    {language === "es" ? "Descargar CV" : "Download CV"}
+                  </Button>
+                </div>
+              </motion.div>
+            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-lime-500/20 shadow-xl">
+                <Image
+                  src={profile.src}
+                  alt="Gabriel Mattesich"
+                  width={400}
+                  height={400}
+                  className="object-cover"
+                  priority
+                />
               </div>
-            </AccordionContent>
-          </AccordionItem>
-
-          {/* Recomendaciones */}
-          <AccordionItem value="recommendations">
-            <AccordionTrigger className="text-lg sm:text-xl lg:text-2xl font-bold">
-              {language === "es" ? "Recomendaciones" : "Recommendations"}
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="mb-8 p-4 sm:p-6 lg:p-8">
-                <p className="text-sm sm:text-base lg:text-lg">
-                  {metadata.recommendations}
-                </p>
+              <div className="absolute -bottom-4 -right-4 bg-slate-800 rounded-full p-2 shadow-lg">
+                <div className="flex space-x-1">
+                  <button
+                    onClick={() => changeLanguage("es")}
+                    className={cn(
+                      "px-2 py-1 rounded-l-md text-xs font-medium transition-colors",
+                      language === "es" ? "bg-lime-600 text-white" : "bg-slate-700 text-slate-300 hover:bg-slate-600",
+                    )}
+                  >
+                    🇦🇷 ES
+                  </button>
+                  <button
+                    onClick={() => changeLanguage("en")}
+                    className={cn(
+                      "px-2 py-1 rounded-r-md text-xs font-medium transition-colors",
+                      language === "en" ? "bg-lime-600 text-white" : "bg-slate-700 text-slate-300 hover:bg-slate-600",
+                    )}
+                  >
+                    🌎 EN
+                  </button>
+                </div>
               </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
-
-      {/* Filtro de desenfoque cuando el menú está abierto */}
-      {isOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"></div>
-      )}
-      {/* Botón flotante principal */}
-      <div className="fixed right-8 bottom-8 flex flex-col gap-4 z-50">
-        
-        <button
-          onClick={toggleMenu}
-          className="bg-violet-500/80 text-white p-4 rounded-full shadow-lg hover:bg-violet-600 transition transform hover:scale-105 z-50"
-          aria-label="Toggle Menu"
-        >
-          {isOpen ? <XIcon /> : <MenuIcon />}
-        </button>
-        {/* Opciones desplegables */}
-        {isOpen && (
-          <div className="flex flex-col gap-4 mt-4 z-50">
-            <a
-              href="https://www.linkedin.com/in/gabriel-mattesich"
-              className="bg-blue-500/80 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition transform hover:scale-105 z-50 flex- flex-item"
-              aria-label="LinkedIn"
-            >
-              <div>
-                <LinkedinIcon />
-              </div>
-            </a>
-            <a
-              href="mailto:mattesichgabriel@gmail.com"
-              className="bg-green-500/80 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition transform hover:scale-105 z-50"
-              aria-label="Correo electrónico"
-            >
-              <MailIcon />
-            </a>
-            <a
-              href="https://github.com/gabrielmattesich"
-              className="bg-gray-900/80 text-white p-4 rounded-full shadow-lg hover:bg-gray-700 transition transform hover:scale-105 z-50"
-              aria-label="GitHub"
-            >
-              <GithubIcon />
-            </a>
-            <a
-              href={Portfolio.src} // Asegúrate de tener este archivo en tu carpeta pública o el enlace correcto
-              className="bg-pink-500/80 text-white p-4 rounded-full shadow-lg hover:bg-pink-600 transition transform hover:scale-105 z-50"
-              aria-label="Descargar CV"
-            >
-              <FileDownIcon />
-            </a>
+            </motion.div>
           </div>
-        )}
+        </div>
+      </section>
+
+      {/* GitHub Activity */}
+      <section className="py-12 bg-slate-900/50">
+        <div className="container mx-auto px-4">
+          <div className="mb-8 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold mb-2 inline-flex items-center">
+              <Github className="mr-2 text-lime-400" size={24} />
+              {language === "es" ? "Actividad en GitHub" : "GitHub Activity"}
+            </h2>
+            <p className="text-slate-400">
+              {language === "es" ? "Mi historial de contribuciones" : "My contribution history"}
+            </p>
+          </div>
+          <div className="bg-slate-800/40 backdrop-blur-sm rounded-xl p-6 shadow-lg max-w-4xl mx-auto overflow-x-auto">
+            <GitHubCalendar username="gabrielmattesich" colorScheme="light" hideColorLegend hideMonthLabels={false} />
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <Tabs defaultValue="summary" className="max-w-4xl mx-auto">
+            <TabsList className="grid grid-cols-4 mb-8">
+              <TabsTrigger value="summary" onClick={() => setActiveSection("summary")}>
+                <span className="flex items-center">
+                  <Star className="mr-2 h-4 w-4" />
+                  <span className="hidden sm:inline">{language === "es" ? "Presentación" : "Summary"}</span>
+                </span>
+              </TabsTrigger>
+              <TabsTrigger value="experience" onClick={() => setActiveSection("experience")}>
+                <span className="flex items-center">
+                  <Briefcase className="mr-2 h-4 w-4" />
+                  <span className="hidden sm:inline">{language === "es" ? "Experiencia" : "Experience"}</span>
+                </span>
+              </TabsTrigger>
+              <TabsTrigger value="education" onClick={() => setActiveSection("education")}>
+                <span className="flex items-center">
+                  <GraduationCap className="mr-2 h-4 w-4" />
+                  <span className="hidden sm:inline">{language === "es" ? "Educación" : "Education"}</span>
+                </span>
+              </TabsTrigger>
+              <TabsTrigger value="recommendations" onClick={() => setActiveSection("recommendations")}>
+                <span className="flex items-center">
+                  <Star className="mr-2 h-4 w-4" />
+                  <span className="hidden sm:inline">{language === "es" ? "Recomendaciones" : "Recommendations"}</span>
+                </span>
+              </TabsTrigger>
+            </TabsList>
+
+            <div className="bg-slate-800/30 backdrop-blur-md rounded-xl p-6 shadow-lg">
+              <TabsContent value="summary" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h3 className="text-2xl font-bold mb-4 text-lime-400">
+                    {language === "es" ? "Presentación" : "Summary"}
+                  </h3>
+                  <div className="prose prose-invert max-w-none">
+                    <p className="text-slate-300 whitespace-pre-line">{metadata.summary}</p>
+                  </div>
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="experience" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h3 className="text-2xl font-bold mb-6 text-lime-400">
+                    {language === "es" ? "Experiencia Profesional" : "Professional Experience"}
+                  </h3>
+
+                  <div className="space-y-8">
+                    {metadata.experience.map((exp, index) => (
+                      <Card key={index} className="bg-slate-800/40 border-slate-700">
+                        <CardContent className="p-6">
+                          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
+                            <div>
+                              <h4 className="text-xl font-bold text-white">{exp.company}</h4>
+                              <p className="text-lime-400 font-medium">{exp.role}</p>
+                            </div>
+                            <div className="flex flex-col items-start md:items-end text-sm text-slate-400">
+                              <div className="flex items-center">
+                                <Calendar className="mr-1 h-4 w-4" />
+                                <span>{exp.period}</span>
+                              </div>
+                              <div className="flex items-center mt-1">
+                                <MapPin className="mr-1 h-4 w-4" />
+                                <span>{exp.location}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <ul className="space-y-2 text-slate-300 list-disc list-inside">
+                            {exp.description.map((desc, i) => (
+                              <li key={i} className="pl-2">
+                                <span className="text-slate-300">{desc}</span>
+                              </li>
+                            ))}
+                          </ul>
+
+                          {exp.conclusion && (
+                            <p className="mt-4 text-slate-300 italic border-l-2 border-lime-500 pl-4">
+                              {exp.conclusion}
+                            </p>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="education" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h3 className="text-2xl font-bold mb-6 text-lime-400">
+                    {language === "es" ? "Educación y Certificaciones" : "Education & Certifications"}
+                  </h3>
+
+                  <div className="space-y-4">
+                    {metadata.education.map((edu, index) => (
+                      <div key={index} className="bg-slate-800/40 p-4 rounded-lg border-l-4 border-lime-500">
+                        <p className="text-slate-300">{edu}</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="recommendations" className="mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h3 className="text-2xl font-bold mb-6 text-lime-400">
+                    {language === "es" ? "Recomendaciones" : "Recommendations"}
+                  </h3>
+
+                  <div className="bg-slate-800/40 p-6 rounded-lg border border-slate-700">
+                    <blockquote className="relative">
+                      <p className="text-slate-300 relative z-10 pl-6 pt-4">{metadata.recommendations}</p>
+                    </blockquote>
+                  </div>
+                </motion.div>
+              </TabsContent>
+            </div>
+          </Tabs>
+        </div>
+      </section>
+
+      {/* Floating Action Button */}
+      <div className="fixed right-8 bottom-8 z-50">
+        <AnimatePresence>
+          <motion.button
+            key="menu-button"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            whileHover={{ scale: 1.05 }}
+            onClick={toggleMenu}
+            className="bg-lime-600 text-white p-4 rounded-full shadow-lg hover:bg-lime-700 transition-colors"
+            aria-label="Toggle Menu"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </motion.button>
+
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ staggerChildren: 0.1, delayChildren: 0.1 }}
+              className="absolute bottom-16 right-0 flex flex-col gap-3"
+            >
+              <motion.a
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+                href="https://www.linkedin.com/in/gabriel-mattesich"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={20} />
+              </motion.a>
+              <motion.a
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                href="mailto:mattesichgabriel@gmail.com"
+                className="bg-green-600 text-white p-3 rounded-full shadow-lg hover:bg-green-700 transition-colors flex items-center justify-center"
+                aria-label="Email"
+              >
+                <Mail size={20} />
+              </motion.a>
+              <motion.a
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                href="https://github.com/gabrielmattesich"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-gray-800 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
+                aria-label="GitHub"
+              >
+                <Github size={20} />
+              </motion.a>
+              <motion.button
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                onClick={handleCVDownload}
+                className="bg-pink-600 text-white p-3 rounded-full shadow-lg hover:bg-pink-700 transition-colors flex items-center justify-center"
+                aria-label="Download CV"
+              >
+                <FileDown size={20} />
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
+      {/* Overlay when menu is open */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+            onClick={toggleMenu}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* CV Download Dialog */}
+      <CVDownloadDialog open={showCVDialog} onOpenChange={setShowCVDialog} language={language} />
 
       {/* Footer */}
-      <footer className="text-center text-sm sm:text-base lg:text-lg py-4 mt-8 backdrop-blur-sm rounded-full p-4">
-        <p>© 2024 Gabriel Mattesich 🇦🇷</p> <br />
-        <p>Version: {product_version.version}</p>
+      <footer className="py-8 bg-slate-950">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-slate-400">© {new Date().getFullYear()} Gabriel Mattesich 🇦🇷</p>
+          <p className="text-slate-500 text-sm mt-2">{language === "es" ? "Versión" : "Version"}: {portafolio.version}</p>
+        </div>
       </footer>
     </div>
   );
