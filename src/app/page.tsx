@@ -265,7 +265,7 @@ export default function Portfolio() {
                               </p>
                               {exp.tools && (
                                 <div className="mt-6">
-                                  <hr className="text-primary" />
+                                  <hr className="text-primary mt-3 mb-3" />
 
                                   {exp.tools.map((tool: string) => (
                                     <Badge key={tool} className="ml-1 mr-1">
