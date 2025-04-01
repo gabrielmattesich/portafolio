@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import CodeParticles from "./code-particles";
-import TechFlow from "./tech-flow";
 
 export default function AnimatedBackground() {
   const [animation, setAnimation] = useState<"code" | "flow">("flow");
@@ -18,7 +17,7 @@ export default function AnimatedBackground() {
 
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <TechFlow />
+      <CodeParticles />
     </div>
   );
 }
