@@ -6,19 +6,19 @@ import TechFlow from "./tech-flow";
 
 export default function AnimatedBackground() {
   const [animation, setAnimation] = useState<"code" | "flow">("flow");
-  
+
   useEffect(() => {
     // Switch animation every 30 seconds
     const interval = setInterval(() => {
-      setAnimation(prev => prev === "code" ? "flow" : "code");
+      setAnimation((prev) => (prev === "code" ? "flow" : "code"));
     }, 30000);
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {animation === "code" ? <CodeParticles /> : <TechFlow />}
+      <TechFlow />
     </div>
   );
 }
