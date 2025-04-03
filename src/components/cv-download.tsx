@@ -101,7 +101,7 @@ export default function CVDownloadDialog({
       selectedFormat === "jpg"
         ? cv.src
         : selectedFormat === "pdf"
-        ? "/portfolio.pdf"
+        ? "https://gabrielmattesich.github.io/portafolio/portfolio.pdf"
         : null;
 
     if (!fileSrc) {
