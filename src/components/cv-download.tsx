@@ -2,28 +2,52 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FileDown, FileText, Download, Check, X, FileType, Eye } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  FileDown,
+  FileText,
+  Download,
+  Check,
+  X,
+  FileType,
+  Eye,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
-import cv from '@/assets/portfolio.jpg'
+import cv from "@/assets/portfolio.jpg";
+
 interface CVDownloadDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   language: "es" | "en";
 }
 
-export default function CVDownloadDialog({ open, onOpenChange, language }: CVDownloadDialogProps) {
-  const [downloadState, setDownloadState] = useState<"idle" | "downloading" | "success" | "error">("idle");
+export default function CVDownloadDialog({
+  open,
+  onOpenChange,
+  language,
+}: CVDownloadDialogProps) {
+  const [downloadState, setDownloadState] = useState<
+    "idle" | "downloading" | "success" | "error"
+  >("idle");
   const [progress, setProgress] = useState(0);
-  const [selectedFormat, setSelectedFormat] = useState<"pdf" | "docx" | "jpg">("pdf");
+  const [selectedFormat, setSelectedFormat] = useState<"pdf" | "docx" | "jpg">(
+    "pdf"
+  );
 
   const translations = {
     es: {
       title: "Descargar Curriculum Vitae",
-      description: "Obtén una copia de mi CV actualizado para conocer más sobre mi experiencia y habilidades.",
+      description:
+        "Obtén una copia de mi CV actualizado para conocer más sobre mi experiencia y habilidades.",
       preview: "Vista previa",
       download: "Descargar",
       downloading: "Descargando...",
@@ -39,7 +63,8 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
     },
     en: {
       title: "Download Curriculum Vitae",
-      description: "Get a copy of my updated CV to learn more about my experience and skills.",
+      description:
+        "Get a copy of my updated CV to learn more about my experience and skills.",
       preview: "Preview",
       download: "Download",
       downloading: "Downloading...",
@@ -52,7 +77,7 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
       selectFormat: "Select format",
       fileSize: "Size: 1.2 MB",
       lastUpdated: "Last updated: April 2025",
-    }
+    },
   };
 
   const t = translations[language];
@@ -60,7 +85,7 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
   const handleDownload = () => {
     setDownloadState("downloading");
     setProgress(0);
-    
+
     // Simulate download progress
     const interval = setInterval(() => {
       setProgress((prev) => {
@@ -72,10 +97,20 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
         return prev + 10;
       });
     }, 200);
+    const fileSrc =
+      selectedFormat === "jpg"
+        ? cv.src
+        : selectedFormat === "pdf"
+        ? "/portfolio.pdf"
+        : null;
 
+    if (!fileSrc) {
+      console.error("No hay una fuente válida para descargar.");
+      return;
+    }
     // In a real implementation, you would use something like:
-    const link = document.createElement('a');
-    link.href = `${cv.src}`;
+    const link = document.createElement("a");
+    link.href = fileSrc;
     link.download = `gabriel-mattesich-cv.${selectedFormat}`;
     document.body.appendChild(link);
     link.click();
@@ -112,11 +147,11 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
               {t.download}
             </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="preview" className="mt-0">
             <div className="relative aspect-[3/4] w-full bg-slate-800 rounded-md overflow-hidden mb-4">
               <div className="absolute inset-0 flex items-center justify-center">
-                <Image 
+                <Image
                   src={cv.src}
                   alt="CV Preview"
                   width={600}
@@ -124,7 +159,10 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/80 flex items-end justify-center pb-8">
-                  <Button variant="outline" className="bg-slate-800/80 hover:bg-slate-700/80 border-lime-500">
+                  <Button
+                    variant="outline"
+                    className="bg-slate-800/80 hover:bg-slate-700/80 border-lime-500"
+                  >
                     <Eye className="mr-2 h-4 w-4" />
                     {t.preview}
                   </Button>
@@ -132,17 +170,17 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
               </div>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="download" className="mt-0">
             <div className="space-y-6">
               <div className="bg-slate-800/60 p-6 rounded-lg border border-slate-700">
                 <h3 className="text-lg font-medium mb-4">{t.selectFormat}</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  {/* <button
+                  <button
                     onClick={() => setSelectedFormat("pdf")}
                     className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center justify-center gap-2 ${
-                      selectedFormat === "pdf" 
-                        ? "border-red-500 bg-lime-500/10" 
+                      selectedFormat === "pdf"
+                        ? "border-red-500 bg-lime-500/10"
                         : "border-slate-700 hover:border-slate-600"
                     }`}
                   >
@@ -151,7 +189,7 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                     </div>
                     <span className="font-medium">PDF</span>
                   </button>
-                  
+                  {/* 
                   <button
                     onClick={() => setSelectedFormat("docx")}
                     className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center justify-center gap-2 ${
@@ -165,12 +203,12 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                     </div>
                     <span className="font-medium">Word</span>
                   </button> */}
-                  
+
                   <button
                     onClick={() => setSelectedFormat("jpg")}
                     className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center justify-center gap-2 ${
-                      selectedFormat === "jpg" 
-                        ? "border-green-500 bg-lime-500/10" 
+                      selectedFormat === "jpg"
+                        ? "border-green-500 bg-lime-500/10"
                         : "border-slate-700 hover:border-slate-600"
                     }`}
                   >
@@ -181,12 +219,12 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                   </button>
                 </div>
               </div>
-              
+
               <div className="flex justify-between text-sm text-slate-400">
                 <span>{t.fileSize}</span>
                 <span>{t.lastUpdated}</span>
               </div>
-              
+
               <AnimatePresence mode="wait">
                 {downloadState === "idle" && (
                   <motion.div
@@ -195,7 +233,7 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
-                    <Button 
+                    <Button
                       className="w-full bg-lime-600 hover:bg-lime-700 text-white"
                       onClick={handleDownload}
                     >
@@ -204,7 +242,7 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                     </Button>
                   </motion.div>
                 )}
-                
+
                 {downloadState === "downloading" && (
                   <motion.div
                     key="downloading"
@@ -214,10 +252,12 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                     className="space-y-2"
                   >
                     <Progress value={progress} className="h-2 bg-slate-700" />
-                    <p className="text-center text-sm text-slate-300">{t.downloading} {progress}%</p>
+                    <p className="text-center text-sm text-slate-300">
+                      {t.downloading} {progress}%
+                    </p>
                   </motion.div>
                 )}
-                
+
                 {downloadState === "success" && (
                   <motion.div
                     key="success"
@@ -230,8 +270,8 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                       <Check className="h-8 w-8 text-green-500" />
                     </div>
                     <p className="text-green-400 font-medium">{t.success}</p>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="border-slate-700 hover:bg-slate-800"
                       onClick={() => resetDownload()}
                     >
@@ -239,7 +279,7 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                     </Button>
                   </motion.div>
                 )}
-                
+
                 {downloadState === "error" && (
                   <motion.div
                     key="error"
@@ -253,15 +293,15 @@ export default function CVDownloadDialog({ open, onOpenChange, language }: CVDow
                     </div>
                     <p className="text-red-400 font-medium">{t.error}</p>
                     <div className="flex gap-2 justify-center">
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         className="border-slate-700 hover:bg-slate-800"
                         onClick={resetDownload}
                       >
                         {t.retry}
                       </Button>
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         className="border-slate-700 hover:bg-slate-800"
                         onClick={() => resetDownload()}
                       >
