@@ -14,6 +14,9 @@ import {
   Briefcase,
   GraduationCap,
   Star,
+  Play,
+  Clock,
+  Tag,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +29,9 @@ import { pageData } from "@/lib/portafolio-data";
 import AnimatedBackground from "@/components/animated-background";
 import { Button } from "@/components/ui/button";
 import CVDownloadDialog from "@/components/cv-download";
+import TutorialVideoModal from "@/components/ReelsWorkingComponent";
+import { tutorials } from "@/lib/reels-data";
+import { Tutorial } from "@/types/tutorials.type";
 
 export default function Portfolio() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +40,25 @@ export default function Portfolio() {
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [showCVDialog, setShowCVDialog] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedVideo, setSelectedVideo] = useState<Tutorial | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredTutorials = tutorials.filter((tutorial) => {
+    const matchesSearch =
+      tutorial.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tutorial.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "all" || tutorial.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const handleVideoChange = (videoId: string) => {
+    const video = tutorials.find((t) => t.id === videoId);
+    if (video) {
+      setSelectedVideo(video);
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -358,6 +383,65 @@ export default function Portfolio() {
             </div>
           </Tabs>
         </div>
+        {/* Reels Working Component */}
+        {/* Tutorials Grid */}
+        <div className="container mx-auto px-4 mt-12">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-lime-400">
+            {language === "es" ? "Tutoriales" : "Tutorials"}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredTutorials.map((tutorial) => (
+              <Card
+                key={tutorial.id}
+                className="group hover:shadow-lg transition-all duration-300 cursor-pointer bg-slate-800/40 border-slate-700 hover:border-lime-500/20"
+                onClick={() => setSelectedVideo(tutorial)}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-lime-500/10 text-lime-400 text-sm font-medium">
+                      <Tag className="w-3.5 h-3.5" />
+                      {tutorial.category}
+                    </div>
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-700/50 text-slate-300 text-sm">
+                      <Clock className="w-3.5 h-3.5" />
+                      {tutorial.duration}
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-semibold mb-3 text-white group-hover:text-lime-400 transition-colors">
+                    {tutorial.title}
+                  </h3>
+
+                  <p className="text-slate-300 mb-6 line-clamp-3">
+                    {tutorial.description}
+                  </p>
+
+                  <div className="flex items-center justify-between">
+                    <Button
+                      variant="ghost"
+                      className="text-lime-400 hover:text-lime-300 hover:bg-lime-500/10"
+                    >
+                      <Play className="w-4 h-4 mr-2" />
+                      {language === "es" ? "Ver tutorial" : "Watch tutorial"}
+                    </Button>
+                    <div className="text-sm text-slate-400">
+                      ID: {tutorial.id}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+        <TutorialVideoModal
+          isOpen={!!selectedVideo}
+          onClose={() => setSelectedVideo(null)}
+          videoUrl={selectedVideo?.loomUrl || ""}
+          title={selectedVideo?.title || ""}
+          tutorials={tutorials}
+          currentVideoId={selectedVideo?.id || ""}
+          onVideoChange={handleVideoChange}
+        />
       </section>
 
       {/* Floating Action Button */}
