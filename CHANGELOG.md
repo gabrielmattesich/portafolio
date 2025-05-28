@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.5](https://github.com/gabrielmattesich/portafolio/compare/v0.1.2...v1.1.5) (2025-05-28)
+
+
+### Bug Fixes
+
+* code ([23608ec](https://github.com/gabrielmattesich/portafolio/commit/23608ec772b6b2b32f077fee09ca2ba4283a7385))
+* cv pdf ([c504c6b](https://github.com/gabrielmattesich/portafolio/commit/c504c6b7d0f2db19b34a63bd0acb1ad39da6ce0c))
+* data ([ebb1125](https://github.com/gabrielmattesich/portafolio/commit/ebb11251735bb3a9513c94fb5c90fa7527c1c41f))
+* image ([6d3d5ca](https://github.com/gabrielmattesich/portafolio/commit/6d3d5caf4aef77b6be21784a9a202e93dec44c5c))
+* image ([eea8d53](https://github.com/gabrielmattesich/portafolio/commit/eea8d530ab92842d083ba316973de30189388630))
+* particle ([d2d4c58](https://github.com/gabrielmattesich/portafolio/commit/d2d4c581ce35d4ac95a908e4ece2ba444a9a68b7))
+* refactor ([514a68b](https://github.com/gabrielmattesich/portafolio/commit/514a68ba38bfc9b1a14d273873dc89384c7f4c0e))
+* space ([b799295](https://github.com/gabrielmattesich/portafolio/commit/b799295ad3bcd0ef28afe6e968dce13fc0b3376f))
+* url ([1037eca](https://github.com/gabrielmattesich/portafolio/commit/1037eca644e386514273de06b23438c8b99fb6ef))
+* version ([58caf5a](https://github.com/gabrielmattesich/portafolio/commit/58caf5afb71f6617907531006c9799dd636d110d))
+
 ### [0.1.2](https://github.com/gabrielmattesich/portafolio/compare/v0.1.1...v0.1.2) (2024-10-14)
 
 
