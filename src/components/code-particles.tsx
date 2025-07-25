@@ -8,74 +8,13 @@ interface CodeParticle {
   y: number;
   size: number;
   color: string;
-  text: string;
   speed: number;
   opacity: number;
   direction: number;
+  character: string;
+  rotationSpeed: number;
+  rotation: number;
 }
-
-const TECH_KEYWORDS = [
-  "function",
-  "const",
-  "let",
-  "async",
-  "await",
-  "return",
-  "import",
-  "export",
-  "class",
-  "interface",
-  "React",
-  "Node.js",
-  "TypeScript",
-  "JavaScript",
-  "AWS",
-  "API",
-  "REST",
-  "GraphQL",
-  "Docker",
-  "Kubernetes",
-  "DevOps",
-  "CI/CD",
-  "Git",
-  "Cloud",
-  "Microservices",
-  "Event-Driven",
-  "Architecture",
-  "Database",
-  "SQL",
-  "NoSQL",
-  "MongoDB",
-  "PostgreSQL",
-  "Redis",
-  "Express",
-  "Next.js",
-  "<div>",
-  "<span>",
-  "<component>",
-  "useState",
-  "useEffect",
-  "npm",
-  "yarn",
-  "pnpm",
-  "webpack",
-  "vite",
-  "tailwind",
-  "css",
-  "html",
-  "jsx",
-  "tsx",
-  "=>",
-  "&&",
-  "||",
-  "??",
-  "...",
-  "{}",
-  "[]",
-  "()",
-  "<>",
-  "://",
-];
 
 export default function CodeParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -92,60 +31,87 @@ export default function CodeParticles() {
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight * 0.7; // 70% of viewport height
+      canvas.height = window.innerHeight;
       initParticles();
     };
 
     const initParticles = () => {
+      const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
       particlesRef.current = [];
-      const particleCount = Math.min(Math.floor(window.innerWidth / 10), 100);
-
+      
       for (let i = 0; i < particleCount; i++) {
-        particlesRef.current.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          size: Math.random() * 12 + 10,
-          color: getRandomColor(0.5),
-          text: TECH_KEYWORDS[Math.floor(Math.random() * TECH_KEYWORDS.length)],
-          speed: Math.random() * 0.5 + 0.1,
-          opacity: Math.random() * 0.5 + 0.1,
-          direction: Math.random() > 0.5 ? 1 : -1,
-        });
+        particlesRef.current.push(createParticle());
       }
     };
 
-    const getRandomColor = (opacity: number) => {
-      const colors = [
-        `rgba(190, 242, 100, ${opacity})`, // lime-300
-        `rgba(163, 230, 53, ${opacity})`, // lime-400
-        `rgba(132, 204, 22, ${opacity})`, // lime-500
-        `rgba(101, 163, 13, ${opacity})`, // lime-600
+    const createParticle = (): CodeParticle => {
+      const codeChars = ['{', '}', '<', '>', '/', '(', ')', '[', ']', ';', '=', '+', '-', '*', '&', '#', '@', '$'];
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 16 + 8,
+        color: getThemeColor(),
+        speed: Math.random() * 0.5 + 0.2,
+        opacity: Math.random() * 0.3 + 0.1,
+        direction: Math.random() * Math.PI * 2,
+        character: codeChars[Math.floor(Math.random() * codeChars.length)],
+        rotationSpeed: (Math.random() - 0.5) * 0.02,
+        rotation: 0,
+      };
+    };
+
+    const getThemeColor = () => {
+      const platformColors = [
+        'rgba(0, 212, 255, 0.6)',    // Primary cyan (--primary)
+        'rgba(124, 58, 237, 0.6)',   // Purple (--glass-secondary)
+        'rgba(16, 185, 129, 0.6)',   // Green (--secondary/--glass-accent)
+        'rgba(255, 183, 77, 0.6)',   // Gold (--glass-highlight)
+        'rgba(156, 163, 175, 0.4)',  // Muted gray
+        'rgba(99, 102, 241, 0.6)',   // Indigo accent
       ];
-      return colors[Math.floor(Math.random() * colors.length)];
+      return platformColors[Math.floor(Math.random() * platformColors.length)];
+    };
+
+    const updateParticle = (particle: CodeParticle) => {
+      particle.x += Math.cos(particle.direction) * particle.speed;
+      particle.y += Math.sin(particle.direction) * particle.speed;
+      particle.rotation += particle.rotationSpeed;
+
+      if (particle.x < -50) particle.x = canvas.width + 50;
+      if (particle.x > canvas.width + 50) particle.x = -50;
+      if (particle.y < -50) particle.y = canvas.height + 50;
+      if (particle.y > canvas.height + 50) particle.y = -50;
+
+      const pulse = Math.sin(Date.now() * 0.002 + particle.x * 0.01) * 0.1;
+      particle.opacity = Math.max(0.05, Math.min(0.4, particle.opacity + pulse));
+    };
+
+    const drawParticle = (particle: CodeParticle) => {
+      ctx.save();
+      ctx.translate(particle.x, particle.y);
+      ctx.rotate(particle.rotation);
+      
+      ctx.font = `${particle.size}px 'Monaco', 'Menlo', 'Ubuntu Mono', monospace`;
+      ctx.fillStyle = particle.color.replace(/[\d.]+\)$/g, `${particle.opacity})`);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      
+      ctx.shadowColor = particle.color;
+      ctx.shadowBlur = 8;
+      ctx.fillText(particle.character, 0, 0);
+      
+      ctx.restore();
     };
 
     const animate = () => {
       if (!canvas || !ctx) return;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(15, 20, 25, 0.02)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      particlesRef.current.forEach((particle) => {
-        // Update position
-        particle.y += particle.speed * particle.direction;
-
-        // Reset if out of bounds
-        if (particle.y > canvas.height) {
-          particle.y = 0;
-        } else if (particle.y < 0) {
-          particle.y = canvas.height;
-        }
-
-        // Draw text
-        ctx.font = `${particle.size}px monospace`;
-        ctx.fillStyle = particle.color;
-        ctx.globalAlpha = particle.opacity;
-        ctx.fillText(particle.text, particle.x, particle.y);
-        ctx.globalAlpha = 1;
+      particlesRef.current.forEach(particle => {
+        updateParticle(particle);
+        drawParticle(particle);
       });
 
       animationRef.current = requestAnimationFrame(animate);
@@ -162,9 +128,8 @@ export default function CodeParticles() {
   }, [theme]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0"
-    />
+    <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+      
+    </div>
   );
 }

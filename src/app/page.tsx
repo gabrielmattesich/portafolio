@@ -14,9 +14,7 @@ import {
   Briefcase,
   GraduationCap,
   Star,
-  Play,
-  Clock,
-  Tag,
+  ChartCandlestick,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,9 +27,7 @@ import { pageData } from "@/lib/portafolio-data";
 import AnimatedBackground from "@/components/animated-background";
 import { Button } from "@/components/ui/button";
 import CVDownloadDialog from "@/components/cv-download";
-import TutorialVideoModal from "@/components/ReelsWorkingComponent";
-import { tutorials } from "@/lib/reels-data";
-import { Tutorial } from "@/types/tutorials.type";
+import TimeCounter from "@/components/time-counter";
 
 export default function Portfolio() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,24 +36,6 @@ export default function Portfolio() {
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [showCVDialog, setShowCVDialog] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedVideo, setSelectedVideo] = useState<Tutorial | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const filteredTutorials = tutorials.filter((tutorial) => {
-    const matchesSearch =
-      tutorial.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tutorial.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || tutorial.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-
-  const handleVideoChange = (videoId: string) => {
-    const video = tutorials.find((t) => t.id === videoId);
-    if (video) {
-      setSelectedVideo(video);
-    }
-  };
 
   useEffect(() => {
     setMounted(true);
@@ -83,29 +61,32 @@ export default function Portfolio() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white">
+    <div className="min-h-screen mesh-gradient text-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {/* Animated Background */}
         <AnimatedBackground />
 
-        <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="container mx-auto px-4 py-16 relative z-10 ">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="flex-1 text-center md:text-left">
+            <div className="flex-1 text-center md:text-left  ">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-lime-400 to-indigo-600">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-100 via-purple-200 to-emerald-300">
                   Gabriel Mattesich
                 </h1>
                 <h2 className="text-xl md:text-2xl font-medium text-slate-300 mb-6">
                   Software Developer
                 </h2>
-                <div className="flex items-center gap-2 justify-center md:justify-start mb-4 text-slate-300">
-                  <MapPin size={16} className="text-lime-400" />
-                  <span>{metadata.location}</span>
+                <div className="flex flex-col gap-2 justify-center md:justify-start mb-4">
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <MapPin size={16} className="text-lime-400" />
+                    <span>{metadata.location}</span>
+                  </div>
+                  <TimeCounter language={language} />
                 </div>
               </motion.div>
             </div>
@@ -115,7 +96,7 @@ export default function Portfolio() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="relative"
             >
-              <div className="w-48 h-48 md:w-64 md:h-64 rounded-md overflow-hidden border-4 border-lime-500/20 shadow-xl">
+              <div className="w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl shadow-black/25 backdrop-blur-sm bg-white/5">
                 <Image
                   src={profile.src}
                   alt="Gabriel Mattesich"
@@ -126,16 +107,16 @@ export default function Portfolio() {
                 />
               </div>
 
-              <div className="mt-10 bottom-2 right-2 sm:bottom-4 sm:right-4 bg-slate-800/30 rounded-md p-3 shadow-lg">
+              <div className="mt-10 bottom-2 right-2 sm:bottom-4 sm:right-4 glass-container p-3">
                 <div className="flex flex-col md:flex-row gap-2 items-center">
                   <div className="flex space-x-1">
                     <button
                       onClick={() => changeLanguage("es")}
                       className={cn(
-                        "px-3 py-1 rounded-l-md text-xs font-medium transition-colors",
+                        "px-3 py-1 rounded-l-xl text-xs font-medium transition-all duration-300",
                         language === "es"
-                          ? "bg-lime-600 text-white"
-                          : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                          ? "bg-cyan-500/80 text-white backdrop-blur-md"
+                          : "glass-button text-slate-300"
                       )}
                     >
                       🇦🇷 ES
@@ -143,23 +124,23 @@ export default function Portfolio() {
                     <button
                       onClick={() => changeLanguage("en")}
                       className={cn(
-                        "px-3 py-1 rounded-r-md text-xs font-medium transition-colors",
+                        "px-3 py-1 rounded-r-xl text-xs font-medium transition-all duration-300",
                         language === "en"
-                          ? "bg-lime-600 text-white"
-                          : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                          ? "bg-cyan-500/80 text-white backdrop-blur-md"
+                          : "glass-button text-slate-300"
                       )}
                     >
                       🌎 EN
                     </button>
                   </div>
 
-                  <Button
+                  {/* <Button
                     onClick={handleCVDownload}
-                    className="bg-lime-600 hover:bg-lime-700 text-white px-4 py-2 text-xs md:text-sm mt-2 md:mt-0"
+                    className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white px-4 py-2 text-xs md:text-sm mt-2 md:mt-0 rounded-xl backdrop-blur-md shadow-lg"
                   >
                     <FileDown className="mr-2 h-4 w-4" />
                     {language === "es" ? "Descargar CV" : "Download CV"}
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
             </motion.div>
@@ -168,11 +149,11 @@ export default function Portfolio() {
       </section>
 
       {/* GitHub Activity */}
-      <section className="py-12 bg-slate-900/50">
+      <section className="py-12 relative">
         <div className="container mx-auto px-4">
           <div className="mb-8 text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-2 inline-flex items-center">
-              <Github className="mr-2 text-lime-400" size={24} />
+              <Github className="mr-2 text-cyan-400" size={24} />
               {language === "es" ? "Actividad en GitHub" : "GitHub Activity"}
             </h2>
             <p className="text-slate-400">
@@ -181,7 +162,7 @@ export default function Portfolio() {
                 : "My contribution history"}
             </p>
           </div>
-          <div className="bg-slate-800/40 backdrop-blur-sm rounded-xl p-6 shadow-lg max-w-4xl mx-auto overflow-x-auto">
+          <div className="glass-container p-6 max-w-4xl mx-auto overflow-x-auto">
             <GitHubCalendar
               username="gabrielmattesich"
               colorScheme="light"
@@ -231,26 +212,26 @@ export default function Portfolio() {
                 </span>
               </TabsTrigger>
               <TabsTrigger
-                value="recommendations"
-                onClick={() => setActiveSection("recommendations")}
+                value="projects"
+                onClick={() => setActiveSection("projects")}
               >
                 <span className="flex items-center">
-                  <Star className="mr-2 h-4 w-4" />
+                  <ChartCandlestick className="mr-2 h-4 w-4" />
                   <span className="hidden sm:inline">
-                    {language === "es" ? "Recomendaciones" : "Recommendations"}
+                    {language === "es" ? "Proyectos" : "Projects"}
                   </span>
                 </span>
               </TabsTrigger>
             </TabsList>
 
-            <div className="bg-slate-800/30 backdrop-blur-md rounded-xl p-6 shadow-lg">
+            <div className="glass-container p-6">
               <TabsContent value="summary" className="mt-0">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h3 className="text-2xl font-bold mb-4 text-lime-400">
+                  <h3 className="text-2xl font-bold mb-4 text-cyan-400">
                     {language === "es" ? "Presentación" : "Summary"}
                   </h3>
                   <div className="prose prose-invert max-w-none">
@@ -267,7 +248,7 @@ export default function Portfolio() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h3 className="text-2xl font-bold mb-6 text-lime-400">
+                  <h3 className="text-2xl font-bold mb-6 text-cyan-400">
                     {language === "es"
                       ? "Experiencia Profesional"
                       : "Professional Experience"}
@@ -275,17 +256,14 @@ export default function Portfolio() {
 
                   <div className="space-y-8">
                     {metadata.experience.map((exp, index) => (
-                      <Card
-                        key={index}
-                        className="bg-slate-800/40 border-slate-700"
-                      >
+                      <Card key={index} className="glass-card">
                         <CardContent className="p-6">
                           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                             <div>
                               <h4 className="text-xl font-bold text-white">
                                 {exp.company}
                               </h4>
-                              <p className="text-lime-400 font-medium">
+                              <p className="text-cyan-400 font-medium">
                                 {exp.role}
                               </p>
                               {exp.tools && (
@@ -324,7 +302,7 @@ export default function Portfolio() {
                             <div className="mt-6">
                               <hr className="text-primary" />
 
-                              <p className="mt-4 text-slate-300 italic border-l-2 border-lime-500 pl-4">
+                              <p className="mt-4 text-slate-300 italic border-l-2 border-cyan-400 pl-4">
                                 {exp.conclusion}
                               </p>
                             </div>
@@ -342,106 +320,166 @@ export default function Portfolio() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h3 className="text-2xl font-bold mb-6 text-lime-400">
+                  <h3 className="text-2xl font-bold mb-6 text-cyan-400">
                     {language === "es"
                       ? "Educación y Certificaciones"
                       : "Education & Certifications"}
                   </h3>
 
-                  <div className="space-y-4">
-                    {metadata.education.map((edu, index) => (
-                      <div
-                        key={index}
-                        className="bg-slate-800/40 p-4 rounded-lg border-l-4 border-lime-500"
-                      >
-                        <p className="text-slate-300">{edu}</p>
+                  <div className="space-y-6">
+                    {metadata.education.map((eduSection, index) => (
+                      <div key={index} className="glass-card p-6">
+                        <h4 className="text-lg font-semibold text-white mb-4 border-b border-white/20 pb-2">
+                          {eduSection.center}
+                        </h4>
+                        <div className="space-y-3">
+                          {eduSection.items.map((item, itemIndex) => (
+                            <div
+                              key={itemIndex}
+                              className="flex items-start justify-between gap-4"
+                            >
+                              <div className="flex-1">
+                                {item.link ? (
+                                  <a
+                                    href={item.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-cyan-300 hover:text-cyan-200 transition-colors underline decoration-dotted"
+                                  >
+                                    {item.name}
+                                  </a>
+                                ) : (
+                                  <span className="text-slate-300">
+                                    {item.name}
+                                  </span>
+                                )}
+                              </div>
+                              {item.completed !== undefined && (
+                                <Badge
+                                  variant={
+                                    item.completed ? "default" : "secondary"
+                                  }
+                                  className={
+                                    item.completed
+                                      ? "bg-green-600/80 text-white bg-green-500"
+                                      : "bg-gray-100/80 text-gray-900 hover:bg-gray-300"
+                                  }
+                                >
+                                  {item.completed
+                                    ? language === "es"
+                                      ? "Completado"
+                                      : "Completed"
+                                    : language === "es"
+                                    ? "Incompleto"
+                                    : "Incomplete"}
+                                </Badge>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
                 </motion.div>
               </TabsContent>
-
-              <TabsContent value="recommendations" className="mt-0">
+              <TabsContent value="projects" className="mt-0">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h3 className="text-2xl font-bold mb-6 text-lime-400">
-                    {language === "es" ? "Recomendaciones" : "Recommendations"}
+                  <h3 className="text-2xl font-bold mb-6 text-cyan-400">
+                    {language === "es" ? "Proyectos" : "Projects"}
                   </h3>
 
-                  <div className="bg-slate-800/40 p-6 rounded-lg border border-slate-700">
-                    <blockquote className="relative">
-                      <p className="text-slate-300 relative z-10 pl-6 pt-4">
-                        {metadata.recommendations}
-                      </p>
-                    </blockquote>
+                  <div className="space-y-6">
+                    {metadata.projects.map((project, index) => (
+                      <Card key={project.key || index} className="glass-card">
+                        <CardContent className="p-6">
+                          <div className="flex flex-col gap-4">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-3 mb-3">
+                                  <h4 className="text-xl font-bold text-white">
+                                    {project.title}
+                                  </h4>
+                                  <Badge
+                                    variant="secondary"
+                                    className={
+                                      project.status === "building"
+                                        ? "bg-yellow-600/80 text-white animate-pulse"
+                                        : project.status === "completed"
+                                        ? "bg-green-600/80 text-white"
+                                        : "bg-gray-600/80 text-white"
+                                    }
+                                  >
+                                    {project.status === "building"
+                                      ? language === "es"
+                                        ? "En construcción"
+                                        : "Building"
+                                      : project.status === "completed"
+                                      ? language === "es"
+                                        ? "Completado"
+                                        : "Completed"
+                                      : project.status}
+                                  </Badge>
+                                </div>
+                                <p className="text-slate-300 text-base leading-relaxed mb-4">
+                                  {project.description}
+                                </p>
+
+                                <div className="flex items-center gap-4 text-sm text-slate-400 mb-4">
+                                  <div className="flex items-center">
+                                    <Calendar className="mr-1 h-4 w-4" />
+                                    <span>
+                                      {language === "es"
+                                        ? "Iniciado:"
+                                        : "Started:"}{" "}
+                                      {project.started}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {project.technologies && (
+                                  <div className="mb-4">
+                                    <h5 className="text-sm font-medium text-cyan-400 mb-2">
+                                      {language === "es"
+                                        ? "Tecnologías:"
+                                        : "Technologies:"}
+                                    </h5>
+                                    <div className="flex flex-wrap gap-1">
+                                      {project.technologies.map((tech) => (
+                                        <Badge
+                                          key={tech}
+                                          variant="outline"
+                                          className="text-xs"
+                                        >
+                                          {tech}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {project.demoAvailable && (
+                                  <Button className=" to-cyan-500/30  hover:to-cyan-600/30 text-white cursor-pointer" disabled>
+                                    {language === "es"
+                                      ? "Solicitar demo"
+                                      : "Request demo"}
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
                 </motion.div>
               </TabsContent>
             </div>
           </Tabs>
         </div>
-        {/* Reels Working Component */}
-        {/* Tutorials Grid */}
-        <div className="container mx-auto px-4 mt-12">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6 text-lime-400">
-            {language === "es" ? "Tutoriales" : "Tutorials"}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTutorials.map((tutorial) => (
-              <Card
-                key={tutorial.id}
-                className="group hover:shadow-lg transition-all duration-300 cursor-pointer bg-slate-800/40 border-slate-700 hover:border-lime-500/20"
-                onClick={() => setSelectedVideo(tutorial)}
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-lime-500/10 text-lime-400 text-sm font-medium">
-                      <Tag className="w-3.5 h-3.5" />
-                      {tutorial.category}
-                    </div>
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-700/50 text-slate-300 text-sm">
-                      <Clock className="w-3.5 h-3.5" />
-                      {tutorial.duration}
-                    </div>
-                  </div>
-
-                  <h3 className="text-xl font-semibold mb-3 text-white group-hover:text-lime-400 transition-colors">
-                    {tutorial.title}
-                  </h3>
-
-                  <p className="text-slate-300 mb-6 line-clamp-3">
-                    {tutorial.description}
-                  </p>
-
-                  <div className="flex items-center justify-between">
-                    <Button
-                      variant="ghost"
-                      className="text-lime-400 hover:text-lime-300 hover:bg-lime-500/10"
-                    >
-                      <Play className="w-4 h-4 mr-2" />
-                      {language === "es" ? "Ver tutorial" : "Watch tutorial"}
-                    </Button>
-                    <div className="text-sm text-slate-400">
-                      ID: {tutorial.id}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-        <TutorialVideoModal
-          isOpen={!!selectedVideo}
-          onClose={() => setSelectedVideo(null)}
-          videoUrl={selectedVideo?.loomUrl || ""}
-          title={selectedVideo?.title || ""}
-          tutorials={tutorials}
-          currentVideoId={selectedVideo?.id || ""}
-          onVideoChange={handleVideoChange}
-        />
       </section>
 
       {/* Floating Action Button */}
@@ -453,7 +491,7 @@ export default function Portfolio() {
             animate={{ scale: 1, opacity: 1 }}
             whileHover={{ scale: 1.05 }}
             onClick={toggleMenu}
-            className="bg-lime-600 text-white p-4 rounded-full shadow-lg hover:bg-lime-700 transition-colors"
+            className="bg-gradient-to-r from-cyan-500/30 to-purple-600/30 text-white p-4 backdrop-blur-md rounded-full shadow-2xl shadow-black/25 hover:from-cyan-600/30 hover:to-purple-700/30 transition-all duration-300  border border-white/20"
             aria-label="Toggle Menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -474,7 +512,7 @@ export default function Portfolio() {
                 href="https://www.linkedin.com/in/gabriel-mattesich"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+                className="bg-blue-600/80 text-white p-3 rounded-full shadow-2xl shadow-black/25 hover:bg-blue-700/90 transition-all duration-300 flex items-center justify-center backdrop-blur-md border border-white/20"
                 aria-label="LinkedIn"
               >
                 <Linkedin size={20} />
@@ -484,7 +522,7 @@ export default function Portfolio() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
                 href="mailto:mattesichgabriel@gmail.com"
-                className="bg-green-600 text-white p-3 rounded-full shadow-lg hover:bg-green-700 transition-colors flex items-center justify-center"
+                className="bg-green-600/80 text-white p-3 rounded-full shadow-2xl shadow-black/25 hover:bg-green-700/90 transition-all duration-300 flex items-center justify-center backdrop-blur-md border border-white/20"
                 aria-label="Email"
               >
                 <Mail size={20} />
@@ -496,7 +534,7 @@ export default function Portfolio() {
                 href="https://github.com/gabrielmattesich"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gray-800 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 transition-colors flex items-center justify-center"
+                className="bg-gray-800/80 text-white p-3 rounded-full shadow-2xl shadow-black/25 hover:bg-gray-700/90 transition-all duration-300 flex items-center justify-center backdrop-blur-md border border-white/20"
                 aria-label="GitHub"
               >
                 <Github size={20} />
@@ -506,7 +544,7 @@ export default function Portfolio() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
                 onClick={handleCVDownload}
-                className="bg-pink-600 text-white p-3 rounded-full shadow-lg hover:bg-pink-700 transition-colors flex items-center justify-center"
+                className="bg-gradient-to-r from-pink-600 to-purple-600 text-white p-3 rounded-full shadow-2xl shadow-black/25 hover:from-pink-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center backdrop-blur-md border border-white/20"
                 aria-label="Download CV"
               >
                 <FileDown size={20} />
@@ -523,7 +561,7 @@ export default function Portfolio() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+            className="fixed inset-0 glass-overlay z-40"
             onClick={toggleMenu}
           />
         )}
@@ -537,7 +575,7 @@ export default function Portfolio() {
       />
 
       {/* Footer */}
-      <footer className="py-8 bg-slate-950">
+      <footer className="py-8 bg-black/30 backdrop-blur-md border-t border-white/10 rounded-tr-full rounded-tl-full">
         <div className="container mx-auto px-4 text-center">
           <p className="text-slate-400">
             © {new Date().getFullYear()} Gabriel Mattesich 🇦🇷

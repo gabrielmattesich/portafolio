@@ -125,9 +125,9 @@ export default function CVDownloadDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] h-auto overflow-y-auto bg-slate-900 border-slate-700 text-white">
+      <DialogContent className="sm:max-w-[600px] h-5/6 overflow-y-auto glass-container text-white border-white/20">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold flex items-center gap-2 text-lime-400">
+          <DialogTitle className="text-2xl font-bold flex items-center gap-2 text-cyan-400">
             <FileText className="h-6 w-6" />
             {t.title}
           </DialogTitle>
@@ -149,7 +149,7 @@ export default function CVDownloadDialog({
           </TabsList>
 
           <TabsContent value="preview" className="mt-0">
-            <div className="relative aspect-[3/4] w-full bg-slate-800 rounded-md overflow-hidden mb-4">
+            <div className="relative aspect-[3/4] w-full glass-card overflow-hidden mb-4">
               <div className="absolute inset-0 flex items-center justify-center">
                 <Image
                   src={cv.src}
@@ -161,7 +161,7 @@ export default function CVDownloadDialog({
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/80 flex items-end justify-center pb-8">
                   <Button
                     variant="outline"
-                    className="bg-slate-800/80 hover:bg-slate-700/80 border-lime-500"
+                    className="glass-button border-cyan-400 hover:border-cyan-300"
                   >
                     <Eye className="mr-2 h-4 w-4" />
                     {t.preview}
@@ -173,7 +173,7 @@ export default function CVDownloadDialog({
 
           <TabsContent value="download" className="mt-0">
             <div className="space-y-6">
-              <div className="bg-slate-800/60 p-6 rounded-lg border border-slate-700">
+              <div className="glass-card p-6">
                 <h3 className="text-lg font-medium mb-4">{t.selectFormat}</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <button
@@ -181,7 +181,7 @@ export default function CVDownloadDialog({
                     className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center justify-center gap-2 ${
                       selectedFormat === "pdf"
                         ? "border-red-500 bg-lime-500/10"
-                        : "border-slate-700 hover:border-slate-600"
+                        : "border-white/20 hover:border-white/30"
                     }`}
                   >
                     <div className="w-12 h-12 bg-red-500/90 rounded-full flex items-center justify-center">
@@ -195,7 +195,7 @@ export default function CVDownloadDialog({
                     className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center justify-center gap-2 ${
                       selectedFormat === "docx" 
                         ? "border-blue-500 bg-lime-500/10" 
-                        : "border-slate-700 hover:border-slate-600"
+                        : "border-white/20 hover:border-white/30"
                     }`}
                   >
                     <div className="w-12 h-12 bg-blue-500/90 rounded-full flex items-center justify-center">
@@ -209,7 +209,7 @@ export default function CVDownloadDialog({
                     className={`p-4 rounded-lg border-2 transition-all flex flex-col items-center justify-center gap-2 ${
                       selectedFormat === "jpg"
                         ? "border-green-500 bg-lime-500/10"
-                        : "border-slate-700 hover:border-slate-600"
+                        : "border-white/20 hover:border-white/30"
                     }`}
                   >
                     <div className="w-12 h-12 bg-green-500/90 rounded-full flex items-center justify-center">
@@ -251,7 +251,7 @@ export default function CVDownloadDialog({
                     exit={{ opacity: 0 }}
                     className="space-y-2"
                   >
-                    <Progress value={progress} className="h-2 bg-slate-700" />
+                    <Progress value={progress} className="h-2 bg-white/10" />
                     <p className="text-center text-sm text-slate-300">
                       {t.downloading} {progress}%
                     </p>
@@ -272,7 +272,7 @@ export default function CVDownloadDialog({
                     <p className="text-green-400 font-medium">{t.success}</p>
                     <Button
                       variant="outline"
-                      className="border-slate-700 hover:bg-slate-800"
+                      className="glass-button"
                       onClick={() => resetDownload()}
                     >
                       {t.close}
@@ -295,14 +295,14 @@ export default function CVDownloadDialog({
                     <div className="flex gap-2 justify-center">
                       <Button
                         variant="outline"
-                        className="border-slate-700 hover:bg-slate-800"
+                        className="glass-button"
                         onClick={resetDownload}
                       >
                         {t.retry}
                       </Button>
                       <Button
                         variant="outline"
-                        className="border-slate-700 hover:bg-slate-800"
+                        className="glass-button"
                         onClick={() => resetDownload()}
                       >
                         {t.close}
